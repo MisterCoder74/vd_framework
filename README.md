@@ -18,6 +18,9 @@
 </head>
 <body>
 
+  <!-- Optional: override the default theme tokens -->
+  <vd-theme primary="#667eea" secondary="#764ba2" border-radius="12px"></vd-theme>
+
   <vd-structure orientation="landscape" backgroundcolor="#f5f5f5">
     <vd-mainpanel>
       <vd-colorcard backgroundcolor="#667eea" textcolor="white" width="300px">
@@ -28,6 +31,7 @@
 
   <!-- Load order is mandatory -->
   <script src="vd_framework_utils.js"></script>
+  <script src="vd_framework_theme.js"></script>
   <script src="vd_framework_global.js"></script>
   <script src="vd_framework_macrocomponents.js"></script>
 </body>
@@ -45,8 +49,9 @@
 ```
 vd_framework/
 ├── vd_framework_utils.js           ← Phase 1+2 ✅  Foundation layer (load first)
-├── vd_framework_global.js          ← Phase 2 ✅   30 base components
-├── vd_framework_macrocomponents.js ← Phase 2 ✅   15 complex components
+├── vd_framework_theme.js           ← Phase 3 ✅   Theme token system (load 2nd)
+├── vd_framework_global.js          ← Phase 2+3 ✅  30 base components
+├── vd_framework_macrocomponents.js ← Phase 2+3 ✅  15 complex components
 ├── openai_proxy.php                ← Phase 1 ✅   Secure OpenAI proxy (server-side)
 ├── calendar-backend.php            ←              Task persistence for vd-planner
 └── README.md
@@ -57,9 +62,76 @@ vd_framework/
 ```
 vd_framework_utils.js
        ↓
+vd_framework_theme.js    ← NEW in Phase 3
+       ↓
 vd_framework_global.js
        ↓
 vd_framework_macrocomponents.js
+```
+
+---
+
+## 🎨 Theming — `<vd-theme>`
+
+`<vd-theme>` injects CSS custom properties (`--vd-*`) into `:root`.
+All VD components consume these tokens automatically.
+
+### Basic usage
+
+```html
+<vd-theme
+  primary="#667eea"
+  secondary="#764ba2"
+  background="#f5f5f5"
+  surface="#ffffff"
+  text="#333333"
+  border="#dddddd"
+  radius="8px"
+  shadow="0 2px 8px rgba(0,0,0,0.15)"
+  font-family="Inter, sans-serif"
+  transition="0.2s ease">
+</vd-theme>
+```
+
+### Default tokens
+
+| Token | Default | Description |
+|---|---|---|
+| `--vd-primary` | `#667eea` | Primary action colour |
+| `--vd-primary-dark` | `#5a6fd6` | Darker primary |
+| `--vd-secondary` | `#764ba2` | Secondary colour |
+| `--vd-background` | `#f5f5f5` | Page background |
+| `--vd-surface` | `#ffffff` | Card / panel surface |
+| `--vd-text` | `#333333` | Primary text |
+| `--vd-text-light` | `#666666` | Secondary text |
+| `--vd-border` | `#dddddd` | Border colour |
+| `--vd-success` | `#4caf50` | Like button, success states |
+| `--vd-error` | `#f44336` | Dislike button, error states |
+| `--vd-warning` | `#ff9800` | Warning states |
+| `--vd-info` | `#2196f3` | Info states |
+| `--vd-radius` | `8px` | Border radius |
+| `--vd-shadow` | `0 2px 8px rgba(0,0,0,0.15)` | Card shadow |
+| `--vd-font-family` | `system-ui, ...` | Font stack |
+| `--vd-transition` | `0.2s ease` | Animation duration |
+| `--vd-spacing` | `8px` | Base spacing unit |
+
+### Programmatic API
+
+```javascript
+// Apply tokens without a <vd-theme> element
+VdTheme.applyTokens({ primary: "#ff6b6b", radius: "4px" });
+
+// Read a resolved token value
+const primaryColor = VdTheme.getVar("primary"); // → "#ff6b6b"
+```
+
+### Per-element override
+
+CSS custom properties cascade, so you can override for specific subtrees:
+
+```css
+/* Only purple buttons inside #sidebar */
+#sidebar { --vd-primary: #9c27b0; }
 ```
 
 ---
@@ -89,6 +161,35 @@ vd_framework_macrocomponents.js
 
 ---
 
+## ♿ ARIA & Accessibility (Phase 3)
+
+All interactive components now ship with full ARIA semantics and keyboard support.
+
+| Component | ARIA role | Added attributes / behaviour |
+|---|---|---|
+| `vd-radionav` | `radiogroup` | `aria-label` |
+| `vd-radiolink` | `radio` | `aria-checked`, `tabindex`, keyboard select |
+| `vd-skewnav`, `vd-popnav` | `navigation` | `aria-label` |
+| `vd-skewlink`, `vd-poplink` | `menuitem` | keyboard activation |
+| `vd-accordion` | `button` on header | `aria-expanded`, Enter/Space toggle |
+| `vd-like` | `button` | `aria-label="Like"`, `aria-pressed` |
+| `vd-dislike` | `button` | `aria-label="Dislike"`, `aria-pressed` |
+| `vd-alert` | `alert` | `aria-live="assertive"` |
+| `vd-confirmation` | `dialog` | `aria-modal`, `aria-labelledby` |
+| `vd-progresscircle` | `progressbar` | `aria-valuenow/min/max` |
+| `vd-countdown` | `timer` | `aria-label` |
+| `vd-chatbox` | `log` | `aria-live="polite"` |
+| `vd-inputbox` | — | `aria-label` on textarea |
+| `vd-chatbot` | — | `role="log"` on history panel |
+| `vd-dalle` | — | `role="log"` on history panel |
+| `vd-carousel` | `region` | `aria-roledescription="carousel"` |
+| `vd-tabcontrol` | `tablist` | `aria-label="Tabs"` |
+| `vd-tab` | `tab` | `aria-selected`, `tabindex` synced with active state |
+| `vd-timeline` | `list` | `aria-label` from title |
+| `vd-timeline-item` | `listitem` | — |
+
+---
+
 ## 🔐 OpenAI Integration (vd-chatbot, vd-dalle)
 
 v4 uses a **server-side PHP proxy** (`openai_proxy.php`) to keep the API key secure.
@@ -96,88 +197,21 @@ The browser never sees the key — it only communicates with `openai_proxy.php`.
 
 ### Setup
 
-**Option A — Environment variable (recommended for production):**
+**Option A — Environment variable (recommended):**
 ```
 SetEnv OPENAI_API_KEY sk-...yourkey...
 ```
 
 **Option B — `.env` file outside the webroot:**
-Create a `.env` file **one directory above** your `public_html` / webroot:
 ```
 OPENAI_API_KEY=sk-...yourkey...
-```
-
-### Component attributes
-
-```html
-<!-- Optional: custom proxy path -->
-<vd-chatbot
-  proxy="openai_proxy.php"
-  name="My Assistant"
-  model="gpt-4o-mini"
-  bgcolor="#1a1a2e"
-  color="white"
-  chatcolor="#f0f0f0"
-  typingindicator="true"
-  input-rows="3"
-  input-placeholder="Ask me anything...">
-</vd-chatbot>
-
-<vd-dalle
-  proxy="openai_proxy.php"
-  name="Image Generator"
-  model="dall-e-3"
-  imagesize="1024x1024"
-  imagenumber="1"
-  download="true">
-</vd-dalle>
 ```
 
 > ⚠️ Never put `key.ini` or `.env` inside the webroot. Never commit API keys to version control.
 
 ---
 
-## 🏛️ VDBaseElement (v4 Base Class)
-
-All v4 components extend `VDBaseElement` (defined in `vd_framework_utils.js`).
-
-### Key features
-
-```javascript
-class MyComponent extends VDBaseElement {
-  static get observedAttributes() {
-    return ['color', 'label'];
-  }
-
-  connectedCallback() {
-    this.render();
-  }
-
-  attributeChangedCallback() {
-    if (this.isConnected) this.render();
-  }
-
-  render() {
-    this.shadowRoot.innerHTML = `
-      <style>
-        .box { color: ${VDUtils.attr(this, 'color', '#000')}; }
-      </style>
-      <div class="box">${VDUtils.sanitizeHTML(VDUtils.attr(this, 'label', 'Hello'))}</div>
-    `;
-  }
-}
-
-// Light DOM component (no shadow root):
-class MyLightComponent extends VDBaseElement {
-  static get shadowMode() { return "none"; }
-
-  connectedCallback() {
-    this.innerHTML = `<span>${VDUtils.sanitizeHTML(this.getAttribute("text"))}</span>`;
-  }
-}
-```
-
-### VDBaseElement API
+## 🏛️ VDBaseElement API
 
 | Method | Description |
 |---|---|
@@ -188,39 +222,16 @@ class MyLightComponent extends VDBaseElement {
 | `disconnectedCallback()` | Auto-cleanup (override with `super.disconnectedCallback()`) |
 | `static get shadowMode()` | Return `"none"` to skip shadow DOM (light DOM components) |
 
----
-
 ## 🛠️ VDUtils API
-
-Static utility object available globally as `window.VDUtils`.
 
 | Method | Description |
 |---|---|
-| `VDUtils.sanitizeHTML(str)` | Escape HTML special chars — use for untrusted/user content |
-| `VDUtils.createFragment(htmlString)` | Create `DocumentFragment` from HTML string via `<template>` |
-| `VDUtils.appendChildren(container, elements[])` | Batch-append elements using a single `DocumentFragment` |
-| `VDUtils.buildStyle(cssText)` | Create a `<style>` element with the given CSS |
-| `VDUtils.attr(el, name, [fallback])` | Read attribute with default value |
-| `VDUtils.openaiRequest(payload, [proxyUrl])` | POST to `openai_proxy.php` — returns parsed JSON from OpenAI |
-
----
-
-## 📄 Phase 2 Migration Notes
-
-All 45 components migrated to `VDBaseElement` in v4.
-
-### Changes applied globally
-
-| Change | Details |
-|---|---|
-| `extends VDBaseElement` | All 45 components — replaces `extends HTMLElement` |
-| `this.attachShadow()` removed | `VDBaseElement` handles shadow DOM creation |
-| `innerHTML +=` fixed | `VdStructure`, `VdSidepanel`, `VdMainpanel` now use `<slot>` |
-| `addEventListener` → `_addListener()` | Automatic cleanup on disconnect |
-| `setInterval` → `_addInterval()` | Auto-cleared on disconnect (`VdCountdown`, `VdCarousel`, `VdPlanner`) |
-| `setTimeout` → `_addTimeout()` | Auto-cleared on disconnect |
-| Light DOM flag | `static get shadowMode() { return "none"; }` on `VDTable`, `VDTR`, `VDTH`, `VDTD`, `VdAlert`, `VdConfirmation`, `hspacer`, `VdCarousel` |
-| AI proxy | `VdChatbot` + `VdDalle`: replaced `fetch("key.ini")` + direct OpenAI calls with `VDUtils.openaiRequest()` via `openai_proxy.php` |
+| `VDUtils.sanitizeHTML(str)` | Escape HTML special chars |
+| `VDUtils.createFragment(htmlString)` | Create `DocumentFragment` from HTML string |
+| `VDUtils.appendChildren(container, elements[])` | Batch-append using `DocumentFragment` |
+| `VDUtils.buildStyle(cssText)` | Create a `<style>` element |
+| `VDUtils.attr(el, name, [fallback])` | Read attribute with default |
+| `VDUtils.openaiRequest(payload, [proxyUrl])` | POST to `openai_proxy.php` |
 
 ---
 
@@ -229,8 +240,8 @@ All 45 components migrated to `VDBaseElement` in v4.
 | Phase | Status | Description |
 |---|---|---|
 | **Phase 1 — Foundation** | ✅ Done | `vd_framework_utils.js` (VDBaseElement + VDUtils), `openai_proxy.php` |
-| **Phase 2 — Refactoring** | ✅ Done | All 45 components migrated to `VDBaseElement`, unified render pattern, `<slot>` fix, `_addListener/_addInterval`, AI proxy |
-| **Phase 3 — UX & DX** | 📋 Planned | `<vd-theme>` theming system, full ARIA coverage, keyboard navigation |
+| **Phase 2 — Refactoring** | ✅ Done | All 45 components → `VDBaseElement`, unified render, `<slot>` fix, `_addListener/_addInterval`, AI proxy |
+| **Phase 3 — UX & DX** | ✅ Done | `vd_framework_theme.js` (CSS vars, `<vd-theme>`), full ARIA on 20 components, keyboard navigation |
 
 ---
 
