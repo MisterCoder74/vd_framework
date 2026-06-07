@@ -206,14 +206,15 @@
 
     <h3>Alert (modal dialog)</h3>
     <div class="demo-description">
-      <code>&lt;vd-alert&gt;</code> — Attrs: title, backgroundcolor, textcolor, width, height<br>
-      Hidden by default (display:none). Call <code>.show()</code> or set attr <code>open</code> to display.<br>
+      <code>&lt;vd-alert&gt;</code> — Attrs: title, backgroundcolor, textcolor, width, height, duration<br>
+      Hidden by default (display:none). Call <code>.show()</code> to display.<br>
+      Optional <code>duration</code> (ms): auto-dismisses after the given time. Omit for manual dismiss.<br>
       <span class="v4-badge">v4 ARIA</span> role=alert + aria-live=assertive + aria-label
     </div>
-    <vd-alert id="demo-alert" title="Information" backgroundcolor="#1a1a2e" textcolor="white" width="400" height="180">
-      This alert message was triggered programmatically via .show()
+    <vd-alert id="demo-alert" title="Information" backgroundcolor="#1a1a2e" textcolor="white" width="400" height="180" duration="3000">
+      This alert will disappear automatically after 3 seconds.
     </vd-alert>
-    <button class="show-btn" onclick="document.getElementById('demo-alert').show()">Show Alert</button>
+    <button class="show-btn" onclick="document.getElementById('demo-alert').show()">Show Alert (auto-dismiss 3s)</button>
 
     <h3>Confirmation Dialog</h3>
     <div class="demo-description">

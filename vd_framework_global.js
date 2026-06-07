@@ -784,7 +784,7 @@ class VDTD extends VDBaseElement {
 
 class VdAlert extends VDBaseElement {
   static get shadowMode() { return "none"; }
-  static get observedAttributes() { return ["open","width","height","title","backgroundcolor","textcolor"]; }
+  static get observedAttributes() { return ["open","width","height","title","backgroundcolor","textcolor","duration"]; }
   connectedCallback() { this.render(); this.style.display = "none"; }
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === "open") this.style.display = newValue !== null ? "block" : "none";
@@ -805,7 +805,11 @@ class VdAlert extends VDBaseElement {
       border-radius:var(--vd-radius,8px);box-shadow:var(--vd-shadow,0 4px 6px rgba(0,0,0,0.3));z-index:9999;`;
     this.innerHTML = `<h3 style="margin-top:0;color:${tc}">${VDUtils.sanitizeHTML(t)}</h3><div>${content}</div>`;
   }
-  show() { this.setAttribute("open",""); }
+  show() {
+    this.setAttribute("open","");
+    const ms = parseInt(this.getAttribute("duration"), 10);
+    if (ms > 0) this._addTimeout(() => this.hide(), ms);
+  }
   hide() { this.removeAttribute("open"); }
 }
 
