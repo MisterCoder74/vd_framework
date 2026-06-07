@@ -155,18 +155,14 @@
       <code>&lt;vd-colorcard&gt;</code> — Attrs: backgroundcolor, textcolor, shadowcolor, imgsrc, imgwidth, imgheight, width
     </div>
     <div class="demo-row">
-      <vd-colorcard backgroundcolor="#667eea" textcolor="white" shadowcolor="rgba(102,126,234,.4)" width="260px">
-        <h4>Card without image</h4>
-        <p>Basic colorcard with text content only.</p>
-      </vd-colorcard>
-      <vd-colorcard backgroundcolor="#1a1a2e" textcolor="white" shadowcolor="rgba(0,0,0,.4)" width="260px">
-        <h4>Dark Card</h4>
-        <p>Dark-themed colorcard with custom styling.</p>
-      </vd-colorcard>
-      <vd-colorcard backgroundcolor="#e8f5e9" textcolor="#1b5e20" shadowcolor="rgba(76,175,80,.3)" width="260px">
-        <h4>Green Card</h4>
-        <p>Light green card for positive content.</p>
-      </vd-colorcard>
+            <vd-colorcard backgroundcolor="#667eea" textcolor="white" shadowcolor="rgba(102,126,234,0.3)" width="100%" imgsrc="posthuman_thinks.jpg" imgwidth="100" imgheight="100">
+                <h3>Card Title 1</h3>
+                <p>This is an interactive card with a beautiful hover effect and image support.</p>
+            </vd-colorcard>
+            <vd-colorcard backgroundcolor="#e04ba2" textcolor="#ffffff" shadowcolor="rgba(118,75,162,0.3)" width="100%">
+                <h3>Card Title 2</h3>
+                <p>Cards can work without images too!</p>
+            </vd-colorcard>
     </div>
 
     <h3>ColorBadge</h3>
@@ -177,6 +173,10 @@
       <vd-colorbadge backgroundcolor="#667eea" textcolor="white" shadowcolor="rgba(102,126,234,.3)" width="180px">🎨 Design</vd-colorbadge>
       <vd-colorbadge backgroundcolor="#764ba2" textcolor="white" shadowcolor="rgba(118,75,162,.3)" width="180px">💻 Development</vd-colorbadge>
       <vd-colorbadge backgroundcolor="#4caf50" textcolor="white" shadowcolor="rgba(76,175,80,.3)" width="180px">✅ Complete</vd-colorbadge>
+        <vd-colorbadge backgroundcolor="#667eea" textcolor="white" shadowcolor="rgba(0,0,0,0.2)" width="600" imgsrc="posthuman_thinks.jpg" imgwidth="80" imgheight="80">
+            <h4>Featured Badge</h4>
+            <p>This badge can display important information with an optional image.</p>
+        </vd-colorbadge>            
     </div>
 
     <h3>Pill (circular user badge)</h3>
@@ -187,9 +187,8 @@
       ⚠️ Use a dark <code>textcolor</code> when no background image is set.
     </div>
     <div class="demo-row">
-      <vd-pill title="Alice" textcolor="#333" width="140px">Designer</vd-pill>
-      <vd-pill title="Bob" textcolor="#333" width="140px">Developer</vd-pill>
-      <vd-pill title="Carol" textcolor="#333" width="140px">PM</vd-pill>
+      <vd-pill title="Maria" image="profile_mary.jpg" textcolor="#eee" width="140px"><vd-center>Maria is a Senior Designer at Vivacity Design</vd-center></vd-pill>
+
     </div>
 
     <h3>Accordion</h3>
@@ -481,10 +480,10 @@
   </div>
 
   <!-- Load scripts — correct order, RELATIVE paths -->
-  <script src="vd_framework_utils.js"></script>
-  <script src="vd_framework_theme.js"></script>
-  <script src="vd_framework_global.js"></script>
-  <script src="vd_framework_macrocomponents.js"></script>
+  <script src="vd_framework_utils.js?v=<?php echo time(); ?>"></script>
+  <script src="vd_framework_theme.js?v=<?php echo time(); ?>"></script>
+  <script src="vd_framework_global.js?v=<?php echo time(); ?>"></script>
+  <script src="vd_framework_macrocomponents.js?v=<?php echo time(); ?>"></script>
 
 </body>
 </html>
