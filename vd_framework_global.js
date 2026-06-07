@@ -258,15 +258,16 @@ class VdStructure extends VDBaseElement {
 }
 
 class VdSidepanel extends VDBaseElement {
-  static get observedAttributes() { return ["shadowcolor","backgroundcolor","textcolor","width","height"]; }
+  static get observedAttributes() { return ["shadowcolor","backgroundcolor","textcolor","width","height","padding"]; }
   connectedCallback() { this.render(); }
   attributeChangedCallback() { if (this.isConnected) this.render(); }
   render() {
     if (!this.shadowRoot.querySelector("style")) {
       this.shadowRoot.innerHTML = `
         <style>
-          :host { border-radius:8px; box-shadow:0 4px 10px var(--shadowcolor,#000); background-color:var(--backgroundcolor,#fff);
-                  color:var(--textcolor,#000); width:var(--width,auto); height:var(--height,auto); box-sizing:border-box; padding:4px; }
+          :host { display:block; border-radius:8px; box-shadow:0 4px 10px var(--shadowcolor,#000); background-color:var(--backgroundcolor,#fff);
+                  color:var(--textcolor,#000); width:var(--width,auto); height:var(--height,auto);
+                  padding:var(--padding,4px); box-sizing:border-box; }
           @media (max-width:770px) { :host { width:100%; padding:2px; height:auto; } }
         </style>
         <slot></slot>`;
@@ -276,19 +277,21 @@ class VdSidepanel extends VDBaseElement {
     this.style.setProperty("--textcolor",       this.getAttribute("textcolor"));
     this.style.setProperty("--width",           this.getAttribute("width"));
     this.style.setProperty("--height",          this.getAttribute("height"));
+    this.style.setProperty("--padding",         this.getAttribute("padding"));
   }
 }
 
 class VdMainpanel extends VDBaseElement {
-  static get observedAttributes() { return ["shadowcolor","backgroundcolor","textcolor","width","height"]; }
+  static get observedAttributes() { return ["shadowcolor","backgroundcolor","textcolor","width","height","padding"]; }
   connectedCallback() { this.render(); }
   attributeChangedCallback() { if (this.isConnected) this.render(); }
   render() {
     if (!this.shadowRoot.querySelector("style")) {
       this.shadowRoot.innerHTML = `
         <style>
-          :host { border-radius:8px; box-shadow:0 4px 10px var(--shadowcolor,#000); background-color:var(--backgroundcolor,#fff);
-                  color:var(--textcolor,#000); width:var(--width,auto); height:var(--height,auto); padding:4px; box-sizing:border-box; }
+          :host { display:block; border-radius:8px; box-shadow:0 4px 10px var(--shadowcolor,#000); background-color:var(--backgroundcolor,#fff);
+                  color:var(--textcolor,#000); width:var(--width,auto); height:var(--height,auto);
+                  padding:var(--padding,4px); box-sizing:border-box; }
           @media (max-width:770px) { :host { width:100%; padding:2px; height:auto; } }
         </style>
         <slot></slot>`;
@@ -298,6 +301,7 @@ class VdMainpanel extends VDBaseElement {
     this.style.setProperty("--textcolor",       this.getAttribute("textcolor"));
     this.style.setProperty("--width",           this.getAttribute("width"));
     this.style.setProperty("--height",          this.getAttribute("height"));
+    this.style.setProperty("--padding",         this.getAttribute("padding"));
   }
 }
 
