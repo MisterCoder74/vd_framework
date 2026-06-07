@@ -2,7 +2,7 @@
  * VD Framework 4 — vd_framework_global.js
  * 30 base components, all migrated to VDBaseElement.
  *
- * Phase 2 changes vs v3:
+ * Phase 2+3 changes vs v3:
  *  - All classes extend VDBaseElement (defined in vd_framework_utils.js)
  *  - this.attachShadow() removed from every constructor (VDBaseElement handles it)
  *  - innerHTML += replaced with proper <slot> pattern (VdStructure, VdSidepanel, VdMainpanel)
@@ -42,6 +42,9 @@ class VDRadioNav extends VDBaseElement {
     `));
     const wrapper = document.createElement("div");
     wrapper.className = "nav";
+    // Phase 3: ARIA
+    wrapper.setAttribute("role",       "radiogroup");
+    wrapper.setAttribute("aria-label", this.getAttribute("label") || "Navigation options");
     wrapper.style.setProperty("--backgroundcolor", this.getAttribute("backgroundcolor"));
     wrapper.style.setProperty("--align", this.getAttribute("align"));
     Array.from(this.children).forEach((child) => {
@@ -90,6 +93,11 @@ class VDRadioLink extends VDBaseElement {
     container.style.setProperty("--shadowcolor",     shadowcolor);
     container.style.setProperty("--backgroundcolor", bgColor);
     if (isActive) container.classList.add("active");
+    // Phase 3: ARIA
+    container.setAttribute("role",         "radio");
+    container.setAttribute("aria-checked",  isActive ? "true" : "false");
+    container.setAttribute("tabindex",      isActive ? "0" : "-1");
+    this._makeAccessible(container, { label: this.textContent.trim() || "Option", role: "radio", keyAction: () => { radio.checked = true; this._selectLink(); } });
     const radio = document.createElement("input");
     radio.type = "radio"; radio.name = "navigation"; radio.className = "radio";
     if (!showRadio) radio.classList.add("hidden");
@@ -107,10 +115,14 @@ class VDRadioLink extends VDBaseElement {
     const allLinks = this.getRootNode().host.parentNode.querySelectorAll("vd-radiolink");
     allLinks.forEach((link) => {
       link.shadowRoot.querySelector(".container").classList.remove("active");
+      link.shadowRoot.querySelector(".container").setAttribute("aria-checked","false");
+      link.shadowRoot.querySelector(".container").setAttribute("tabindex","-1");
       link.shadowRoot.querySelector('input[type="radio"]').checked = false;
       link.setAttribute("active","false");
     });
     this.shadowRoot.querySelector(".container").classList.add("active");
+    this.shadowRoot.querySelector(".container").setAttribute("aria-checked","true");
+    this.shadowRoot.querySelector(".container").setAttribute("tabindex","0");
     this.shadowRoot.querySelector('input[type="radio"]').checked = true;
     this.setAttribute("active","true");
     if (this.getAttribute("url")) window.location.href = this.getAttribute("url");
@@ -129,6 +141,9 @@ class VDSkewNav extends VDBaseElement {
     `));
     const wrapper = document.createElement("div");
     wrapper.className = "nav";
+    // Phase 3: ARIA
+    wrapper.setAttribute("role",       "navigation");
+    wrapper.setAttribute("aria-label", this.getAttribute("label") || "Navigation");
     wrapper.style.setProperty("--backgroundcolor", this.getAttribute("backgroundcolor"));
     wrapper.style.setProperty("--shadowcolor",     this.getAttribute("shadowcolor"));
     wrapper.style.setProperty("--align",           this.getAttribute("align"));
@@ -155,6 +170,8 @@ class VDSkewLink extends VDBaseElement {
     link.style.setProperty("--skewcolor",  this.getAttribute("skewcolor"));
     link.style.setProperty("--textcolor",  this.getAttribute("textcolor"));
     link.style.setProperty("--hovercolor", this.getAttribute("hovercolor"));
+    link.setAttribute("role", "menuitem");
+    this._makeAccessible(link, { label: this.textContent.trim(), role: "menuitem", keyAction: () => link.click() });
     link.innerHTML = this.innerHTML;
     this.shadowRoot.appendChild(link);
   }
@@ -172,6 +189,9 @@ class VDPopNav extends VDBaseElement {
     `));
     const wrapper = document.createElement("div");
     wrapper.className = "nav";
+    // Phase 3: ARIA
+    wrapper.setAttribute("role",       "navigation");
+    wrapper.setAttribute("aria-label", this.getAttribute("label") || "Navigation");
     wrapper.style.setProperty("--backgroundcolor", this.getAttribute("backgroundcolor"));
     wrapper.style.setProperty("--shadowcolor",     this.getAttribute("shadowcolor"));
     wrapper.style.setProperty("--align",           this.getAttribute("align"));
@@ -198,6 +218,8 @@ class VDPopLink extends VDBaseElement {
     link.style.setProperty("--backgroundcolor", this.getAttribute("backgroundcolor"));
     link.style.setProperty("--textcolor",       this.getAttribute("textcolor"));
     link.style.setProperty("--hovercolor",      this.getAttribute("hovercolor"));
+    link.setAttribute("role", "menuitem");
+    this._makeAccessible(link, { label: this.textContent.trim(), role: "menuitem", keyAction: () => link.click() });
     link.innerHTML = this.innerHTML;
     this.shadowRoot.appendChild(link);
   }
@@ -490,11 +512,11 @@ class VDLike extends VDBaseElement {
       <style>
         :host{display:inline-block;}
         .like-button{background-color:${bg};color:${tc};border:none;padding:12px 20px;border-radius:25px;cursor:pointer;
-          font-size:16px;font-weight:500;transition:all 0.3s ease;box-shadow:0 2px 8px ${sc};position:relative;overflow:hidden;
+          font-size:16px;font-weight:500;transition:all var(--vd-transition,0.2s ease);box-shadow:0 2px 8px ${sc};position:relative;overflow:hidden;
           min-width:120px;display:flex;align-items:center;justify-content:center;gap:8px;}
         .like-button:hover{background-color:${hc};transform:translateY(-1px);box-shadow:0 4px 12px ${sc};}
         .like-button:active{transform:translateY(0);transition:transform 0.1s;}
-        .like-button.liked{background-color:#4caf50;color:white;animation:pulse 0.3s ease;}
+        .like-button.liked{background-color:var(--vd-success,#4caf50);color:white;animation:pulse 0.3s ease;}
         .count{background:rgba(255,255,255,0.3);padding:2px 8px;border-radius:12px;font-size:14px;min-width:20px;text-align:center;}
         @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
         .ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,0.6);transform:scale(0);animation:ripple-anim 0.6s linear;pointer-events:none;}
@@ -506,6 +528,10 @@ class VDLike extends VDBaseElement {
       </button>`;
     const btn = this.shadowRoot.querySelector(".like-button");
     const cnt = this.shadowRoot.querySelector(".count");
+    // Phase 3: ARIA
+    btn.setAttribute("aria-label",   "Like");
+    btn.setAttribute("aria-pressed", this.liked ? "true" : "false");
+    this._makeAccessible(btn, { label: "Like", role: "button", keyAction: () => btn.click() });
     this._addListener(btn, "click", (e) => {
       const ripple = document.createElement("span"); ripple.className = "ripple";
       const rect = btn.getBoundingClientRect(); const size = Math.max(rect.width, rect.height);
@@ -514,6 +540,7 @@ class VDLike extends VDBaseElement {
       btn.appendChild(ripple); this._addTimeout(() => ripple.remove(), 600);
       this.liked = !this.liked; this.count = Math.max(0, this.count + (this.liked ? 1 : -1));
       btn.classList.toggle("liked", this.liked); cnt.textContent = this.count;
+      btn.setAttribute("aria-pressed", this.liked ? "true" : "false");
       this.dispatchEvent(new CustomEvent("vd-like-toggle",{detail:{liked:this.liked,count:this.count,element:this},bubbles:true}));
     });
   }
@@ -533,11 +560,11 @@ class VDDislike extends VDBaseElement {
       <style>
         :host{display:inline-block;}
         .dislike-button{background-color:${bg};color:${tc};border:none;padding:12px 20px;border-radius:25px;cursor:pointer;
-          font-size:16px;font-weight:500;transition:all 0.3s ease;box-shadow:0 2px 8px ${sc};position:relative;overflow:hidden;
+          font-size:16px;font-weight:500;transition:all var(--vd-transition,0.2s ease);box-shadow:0 2px 8px ${sc};position:relative;overflow:hidden;
           min-width:120px;display:flex;align-items:center;justify-content:center;gap:8px;}
         .dislike-button:hover{background-color:${hc};transform:translateY(-1px);box-shadow:0 4px 12px ${sc};}
         .dislike-button:active{transform:translateY(0);transition:transform 0.1s;}
-        .dislike-button.disliked{background-color:#e74c3c;color:white;animation:pulse 0.3s ease;}
+        .dislike-button.disliked{background-color:var(--vd-error,#e74c3c);color:white;animation:pulse 0.3s ease;}
         .count{background:rgba(255,255,255,0.3);padding:2px 8px;border-radius:12px;font-size:14px;min-width:20px;text-align:center;}
         @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
         .ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,0.6);transform:scale(0);animation:ripple-anim 0.6s linear;pointer-events:none;}
@@ -549,6 +576,10 @@ class VDDislike extends VDBaseElement {
       </button>`;
     const btn = this.shadowRoot.querySelector(".dislike-button");
     const cnt = this.shadowRoot.querySelector(".count");
+    // Phase 3: ARIA
+    btn.setAttribute("aria-label",   "Dislike");
+    btn.setAttribute("aria-pressed", this.disliked ? "true" : "false");
+    this._makeAccessible(btn, { label: "Dislike", role: "button", keyAction: () => btn.click() });
     this._addListener(btn, "click", (e) => {
       const ripple = document.createElement("span"); ripple.className = "ripple";
       const rect = btn.getBoundingClientRect(); const size = Math.max(rect.width, rect.height);
@@ -557,6 +588,7 @@ class VDDislike extends VDBaseElement {
       btn.appendChild(ripple); this._addTimeout(() => ripple.remove(), 600);
       this.disliked = !this.disliked; this.count = Math.max(0, this.count + (this.disliked ? 1 : -1));
       btn.classList.toggle("disliked", this.disliked); cnt.textContent = this.count;
+      btn.setAttribute("aria-pressed", this.disliked ? "true" : "false");
       this.dispatchEvent(new CustomEvent("vd-dislike-toggle",{detail:{disliked:this.disliked,count:this.count,element:this},bubbles:true}));
     });
   }
@@ -580,9 +612,9 @@ class VDAccordion extends VDBaseElement {
     this.shadowRoot.innerHTML = `
       <style>
         :host{display:block;width:${w};}
-        .accordion{border:1px solid #dee2e6;border-radius:8px;overflow:hidden;background-color:${bg};box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+        .accordion{border:1px solid var(--vd-border,#dee2e6);border-radius:var(--vd-radius,8px);overflow:hidden;background-color:${bg};box-shadow:var(--vd-shadow,0 2px 8px rgba(0,0,0,0.1));}
         .accordion-header{height:${hh};padding:0 20px;background-color:${bg};color:${tc};cursor:pointer;
-          display:flex;align-items:center;justify-content:space-between;transition:background-color 0.3s ease;font-weight:600;user-select:none;}
+          display:flex;align-items:center;justify-content:space-between;transition:background-color var(--vd-transition,0.2s ease);font-weight:600;user-select:none;}
         .accordion-header:hover{background-color:rgba(0,0,0,0.05);}
         .accordion-icon{font-size:18px;transition:transform 0.3s ease;}
         .accordion-icon.open{transform:rotate(180deg);}
@@ -604,10 +636,16 @@ class VDAccordion extends VDBaseElement {
     const content = this.shadowRoot.querySelector(".accordion-content");
     const icon    = this.shadowRoot.querySelector(".accordion-icon");
     if (this.isOpen) { content.classList.add("open"); icon.classList.add("open"); }
+    // Phase 3: ARIA + keyboard
+    header.setAttribute("role",          "button");
+    header.setAttribute("tabindex",      "0");
+    header.setAttribute("aria-expanded", this.isOpen ? "true" : "false");
+    this._makeAccessible(header, { label: this.getAttribute("title") || "Section", role: "button", keyAction: () => header.click() });
     this._addListener(header, "click", () => {
       this.isOpen = !this.isOpen;
       content.classList.toggle("open", this.isOpen); icon.classList.toggle("open", this.isOpen);
       content.style.maxHeight = this.isOpen ? (this.shadowRoot.querySelector(".accordion-body").scrollHeight + 40) + "px" : "0";
+      header.setAttribute("aria-expanded", this.isOpen ? "true" : "false");
       this.dispatchEvent(new CustomEvent("vd-accordion-toggle",{detail:{isOpen:this.isOpen,element:this},bubbles:true}));
     });
   }
@@ -752,9 +790,13 @@ class VdAlert extends VDBaseElement {
     const bg = this.getAttribute("backgroundcolor") || "#333";
     const tc = this.getAttribute("textcolor")       || "#fff";
     const content = this.textContent;
+    // Phase 3: ARIA
+    this.setAttribute("role",       "alert");
+    this.setAttribute("aria-live",  "assertive");
+    this.setAttribute("aria-label", t);
     this.style.cssText = `position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
       width:${w}px;height:${h}px;background-color:${bg};color:${tc};padding:20px;
-      border-radius:8px;box-shadow:0 4px 6px rgba(0,0,0,0.3);z-index:9999;`;
+      border-radius:var(--vd-radius,8px);box-shadow:var(--vd-shadow,0 4px 6px rgba(0,0,0,0.3));z-index:9999;`;
     this.innerHTML = `<h3 style="margin-top:0;color:${tc}">${VDUtils.sanitizeHTML(t)}</h3><div>${content}</div>`;
   }
   show() { this.setAttribute("open",""); }
@@ -775,11 +817,15 @@ class VdConfirmation extends VDBaseElement {
     const bg = this.getAttribute("backgroundcolor") || "#333";
     const tc = this.getAttribute("textcolor")       || "#fff";
     const content = this.textContent;
+    // Phase 3: ARIA
+    this.setAttribute("role",            "dialog");
+    this.setAttribute("aria-modal",      "true");
+    this.setAttribute("aria-labelledby", "vd-confirm-title");
     this.style.cssText = `position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
       width:${w}px;height:${h}px;background-color:${bg};color:${tc};padding:20px;
-      border-radius:8px;box-shadow:0 4px 6px rgba(0,0,0,0.3);z-index:9999;flex-direction:column;`;
+      border-radius:var(--vd-radius,8px);box-shadow:var(--vd-shadow,0 4px 6px rgba(0,0,0,0.3));z-index:9999;flex-direction:column;`;
     this.innerHTML = `
-      <h3 style="margin-top:0;color:${tc}">${VDUtils.sanitizeHTML(t)}</h3>
+      <h3 id="vd-confirm-title" style="margin-top:0;color:${tc}">${VDUtils.sanitizeHTML(t)}</h3>
       <div style="flex:1;margin-bottom:20px;">${content}</div>
       <div style="display:flex;gap:10px;justify-content:flex-end;">
         <button class="cancel-btn" style="padding:8px 20px;cursor:pointer;border:none;border-radius:4px;background-color:#666;color:white;">Cancel</button>

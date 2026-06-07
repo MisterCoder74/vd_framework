@@ -2,7 +2,7 @@
  * VD Framework 4 — vd_framework_macrocomponents.js
  * 15 complex components, all migrated to VDBaseElement.
  *
- * Phase 2 changes vs v3:
+ * Phase 2+3 changes vs v3:
  *  - All classes extend VDBaseElement
  *  - this.attachShadow() removed from every constructor
  *  - All addEventListener → _addListener() for automatic cleanup
@@ -39,7 +39,7 @@ class VdTimeline extends VDBaseElement {
                   display:inline-block;border-radius:12px;width:${w};height:${h};color:${tc};box-sizing:border-box;}
         ::slotted(vd-timeline-item){box-sizing:border-box;display:block;}
       </style>
-      <div class="timeline"><h2>${VDUtils.sanitizeHTML(t)}</h2><slot></slot></div>`;
+      <div class="timeline" role="list" aria-label="${VDUtils.sanitizeHTML(t)}"><h2>${VDUtils.sanitizeHTML(t)}</h2><slot></slot></div>`;
   }
 }
 
@@ -62,7 +62,7 @@ class VdTimelineItem extends VDBaseElement {
         .timeline-content{margin-left:20px;}
         .timeline-title{font-weight:bold;font-size:1.2em;margin:5px 0;}
       </style>
-      <div class="timeline-item">
+      <div class="timeline-item" role="listitem">
         <div class="timeline-date">${VDUtils.sanitizeHTML(date)}</div>
         <div class="timeline-content">
           <div class="timeline-title">${VDUtils.sanitizeHTML(t)}</div>
@@ -87,7 +87,7 @@ class VdProgressCircle extends VDBaseElement {
   attributeChangedCallback() { if (this.isConnected) this.render(); }
   render() {
     const value  = this.getAttribute("value") || 0;
-    const color  = this.getAttribute("color") || "gray";
+    const color  = this.getAttribute("color") || "var(--vd-primary,#667eea)";
     const w      = parseInt(this.getAttribute("width")) || 120;
     const radius = (w-10)/2, sw = 10, circ = 2*Math.PI*radius, offset = circ-(value/100)*circ;
     this.svg.setAttribute("width",w); this.svg.setAttribute("height",w);
@@ -103,6 +103,12 @@ class VdProgressCircle extends VDBaseElement {
     this.percentText.setAttribute("x",w/2); this.percentText.setAttribute("y",w/2+4);
     this.percentText.setAttribute("font-size","16"); this.percentText.setAttribute("text-anchor","middle");
     this.percentText.setAttribute("fill",color); this.percentText.textContent = `${value}%`;
+    // Phase 3: ARIA progressbar
+    this.setAttribute("role",          "progressbar");
+    this.setAttribute("aria-valuenow", String(value));
+    this.setAttribute("aria-valuemin", "0");
+    this.setAttribute("aria-valuemax", "100");
+    this.setAttribute("aria-label",    this.getAttribute("label") || `Progress: ${value}%`);
   }
 }
 
@@ -114,7 +120,12 @@ class VdCountdown extends VDBaseElement {
     this.shadowRoot.append(this._style, this._span);
   }
   static get observedAttributes() { return ["backgroundcolor","textcolor","end"]; }
-  connectedCallback() { this._updateStyles(); this._startCountdown(); }
+  connectedCallback() {
+    // Phase 3: ARIA
+    this.setAttribute("role",       "timer");
+    this.setAttribute("aria-label", this.getAttribute("label") || "Countdown timer");
+    this._updateStyles(); this._startCountdown();
+  }
   attributeChangedCallback(name) {
     if (!this.isConnected) return;
     if (name==="backgroundcolor"||name==="textcolor") this._updateStyles();
@@ -151,7 +162,13 @@ class VdChatbox extends VDBaseElement {
     this.shadowRoot.append(this._styleEl, this._container);
   }
   static get observedAttributes() { return ["backgroundcolor","textcolor","shadowcolor","width"]; }
-  connectedCallback() { this._updateStyles(); this._renderLines(); }
+  connectedCallback() {
+    // Phase 3: ARIA live region
+    this._container.setAttribute("role",      "log");
+    this._container.setAttribute("aria-live", "polite");
+    this._container.setAttribute("aria-label","Chat messages");
+    this._updateStyles(); this._renderLines();
+  }
   attributeChangedCallback() { if (this.isConnected) this._updateStyles(); }
   _updateStyles() {
     const bg = this.getAttribute("backgroundcolor")||"white";
@@ -198,6 +215,10 @@ class VdCarousel extends VDBaseElement {
     this._currentIdx = 0;
     this._speed      = parseInt(this.getAttribute("speed"))  || 300;
     this._direction  = this.getAttribute("direction")        || "left";
+    // Phase 3: ARIA carousel
+    this.setAttribute("role",                "region");
+    this.setAttribute("aria-roledescription","carousel");
+    this.setAttribute("aria-label",          this.getAttribute("label") || "Image carousel");
     Object.assign(this.style, {
       display:"block", overflow:"hidden", position:"relative",
       width:           this.getAttribute("width")           || "300px",
@@ -244,6 +265,8 @@ class VdInputBox extends VDBaseElement {
       </style>
       <textarea rows="${rows}" placeholder="${ph}" id="inputfield"></textarea>`;
     this._input = this.shadowRoot.querySelector("#inputfield");
+    // Phase 3: ARIA
+    this._input.setAttribute("aria-label", ph);
     if (ve) {
       this._addListener(this._input, "keydown", (e) => {
         if (e.key==="Enter" && !e.shiftKey) {
@@ -297,7 +320,7 @@ class VdChatbot extends VDBaseElement {
       </style>
       <div class="chatbot-container">
         <h3>${VDUtils.sanitizeHTML(name)}</h3>
-        <div class="chathistory" id="chatContainer"></div>
+        <div class="chathistory" id="chatContainer" role="log" aria-live="polite" aria-label="Chat history"></div>
         <vd-inputbox placeholder="${ph}" rows="${rows}" verifyenter="true" style="width:100%;"></vd-inputbox>
       </div>`;
     this._hasEventListener = false;
@@ -399,7 +422,7 @@ class VdDalle extends VDBaseElement {
       </style>
       <div class="dalle-container">
         <h3>${VDUtils.sanitizeHTML(name)}</h3>
-        <div class="chathistory" id="chatContainer"></div>
+        <div class="chathistory" id="chatContainer" role="log" aria-live="polite" aria-label="Image generation history"></div>
         <div class="input-container">
           <vd-inputbox placeholder="${ph}" rows="${rows}" verifyenter="true"></vd-inputbox>
         </div>
@@ -763,11 +786,11 @@ class VdTabControl extends VDBaseElement {
     this.shadowRoot.innerHTML=`
       <style>
         :host{display:block;border-radius:12px;height:auto;padding:8px;}
-        .tabs{display:flex;border-bottom:2px solid var(--tab-border-color,lightgray);}
+        .tabs{display:flex;border-bottom:2px solid var(--vd-border,lightgray);}
         ::slotted(vd-tab){flex:1;padding:10px;cursor:pointer;text-align:center;transition:background-color 0.3s;}
         ::slotted(vd-tab:hover){background-color:rgba(255,255,255,0.1);}
       </style>
-      <div class="tabs"><slot></slot></div>
+      <div class="tabs" role="tablist" aria-label="Tabs"><slot></slot></div>
       <div class="content"><div class="inner-content" style="padding:10px;"></div></div>`;
     this._setTabListeners();
   }
@@ -791,7 +814,13 @@ class VdTabControl extends VDBaseElement {
 
 class VdTab extends VDBaseElement {
   static get observedAttributes(){return["title","backgroundcolor","textcolor","active"];}
-  connectedCallback(){this.render();this._updateStyle();}
+  connectedCallback(){
+    this.render();this._updateStyle();
+    // Phase 3: ARIA
+    this.setAttribute("role",          "tab");
+    this.setAttribute("aria-selected", this.getAttribute("active")==="true" ? "true" : "false");
+    this.setAttribute("tabindex",      this.getAttribute("active")==="true" ? "0" : "-1");
+  }
   attributeChangedCallback(name,oldValue,newValue){
     if(!this.isConnected)return;
     if(name==="title"){const s=this.shadowRoot.querySelector("span");if(s)s.textContent=newValue;}
@@ -801,6 +830,8 @@ class VdTab extends VDBaseElement {
     const isActive=this.getAttribute("active")==="true";
     this.style.backgroundColor=isActive?(this.getAttribute("backgroundcolor")||"white"):"black";
     this.style.color=isActive?(this.getAttribute("textcolor")||"black"):"white";
+    this.setAttribute("aria-selected", isActive ? "true" : "false");
+    this.setAttribute("tabindex",      isActive ? "0" : "-1");
   }
   render(){
     this.shadowRoot.innerHTML=`
