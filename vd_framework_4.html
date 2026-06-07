@@ -18,6 +18,8 @@
     .header a{color:#ffffffcc;}
     .v4-badge{display:inline-block;background:#e8f5e9;color:#1b5e20;border-radius:4px;padding:2px 8px;font-size:.8rem;font-weight:bold;margin-left:6px;vertical-align:middle;}
     .demo-row{display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-start;margin-bottom:1rem;}
+    .show-btn{display:inline-block;padding:8px 18px;background:#667eea;color:white;border:none;border-radius:6px;cursor:pointer;font-size:.9rem;margin-right:.5rem;}
+    .show-btn:hover{background:#764ba2;}
   </style>
 </head>
 <body>
@@ -35,12 +37,12 @@
     </p>
   </div>
 
-  <!-- THEME SYSTEM -->
+  <!-- ─── THEME ─────────────────────────────────────────────────────────── -->
   <div class="demo-section">
     <h2>🎨 Theme System <span class="v4-badge">NEW v4</span></h2>
     <div class="demo-description">
       <code>&lt;vd-theme&gt;</code> injects <code>--vd-*</code> CSS custom properties into <code>:root</code>.
-      All components consume these tokens automatically. Below uses default tokens.
+      All components consume these tokens automatically.
     </div>
     <vd-theme
       primary="#667eea"
@@ -50,7 +52,7 @@
       radius="8px"
       transition="0.2s ease">
     </vd-theme>
-    <p style="color:#555;font-size:.9rem;">
+    <p style="color:#555;font-size:.9rem;line-height:2;">
       ✅ <code>--vd-primary: #667eea</code> &nbsp;
       ✅ <code>--vd-secondary: #764ba2</code> &nbsp;
       ✅ <code>--vd-success: #4caf50</code> &nbsp;
@@ -59,14 +61,15 @@
     </p>
   </div>
 
-  <!-- NAVIGATION -->
+  <!-- ─── NAVIGATION ────────────────────────────────────────────────────── -->
   <div class="demo-section">
     <h2>📍 Navigation Components</h2>
 
     <h3>Radio Navigation</h3>
     <div class="demo-description">
       <code>&lt;vd-radionav&gt;</code> / <code>&lt;vd-radiolink&gt;</code> —
-      <span class="v4-badge">v4 ARIA</span> role=radiogroup / role=radio + aria-checked + keyboard
+      Attrs: backgroundcolor, align, textcolor / url, textcolor, activecolor, shadowcolor, active, show-radio<br>
+      <span class="v4-badge">v4 ARIA</span> role=radiogroup + role=radio + aria-checked + keyboard ↑↓
     </div>
     <vd-radionav backgroundcolor="#667eea" align="center" textcolor="white">
       <vd-radiolink url="#" textcolor="white" activecolor="#764ba2" shadowcolor="rgba(0,0,0,.3)" active="true" show-radio="true">Home</vd-radiolink>
@@ -78,7 +81,8 @@
     <h3>Pop Navigation</h3>
     <div class="demo-description">
       <code>&lt;vd-popnav&gt;</code> / <code>&lt;vd-poplink&gt;</code> —
-      <span class="v4-badge">v4 ARIA</span> role=navigation + role=menuitem
+      Attrs: backgroundcolor, align, shadowcolor / url, target, backgroundcolor, textcolor, hovercolor<br>
+      <span class="v4-badge">v4 ARIA</span> role=navigation + role=menuitem + keyboard Enter/Space
     </div>
     <vd-popnav backgroundcolor="#333" align="center" shadowcolor="rgba(0,0,0,.3)">
       <vd-poplink url="#" textcolor="white" hovercolor="#667eea">Home</vd-poplink>
@@ -91,7 +95,8 @@
     <h3>Skew Navigation</h3>
     <div class="demo-description">
       <code>&lt;vd-skewnav&gt;</code> / <code>&lt;vd-skewlink&gt;</code> —
-      <span class="v4-badge">v4 ARIA</span> role=navigation + role=menuitem
+      Attrs: backgroundcolor, shadowcolor, align / url, target, skewcolor, textcolor, hovercolor<br>
+      <span class="v4-badge">v4 ARIA</span> role=navigation + role=menuitem + keyboard Enter/Space
     </div>
     <vd-skewnav backgroundcolor="#1a1a2e" shadowcolor="rgba(102,126,234,.5)" align="center">
       <vd-skewlink url="#" skewcolor="#667eea" textcolor="white" hovercolor="#764ba2">Home</vd-skewlink>
@@ -101,188 +106,195 @@
     </vd-skewnav>
   </div>
 
-  <!-- LAYOUT -->
+  <!-- ─── LAYOUT ────────────────────────────────────────────────────────── -->
   <div class="demo-section">
     <h2>🏗️ Layout Components</h2>
 
-    <h3>Structure + Panels (Landscape)</h3>
+    <h3>Structure + Panels (landscape)</h3>
     <div class="demo-description">
-      <code>&lt;vd-structure orientation="landscape"&gt;</code> with <code>&lt;vd-sidepanel&gt;</code> + <code>&lt;vd-mainpanel&gt;</code>
+      <code>&lt;vd-structure orientation="landscape"&gt;</code> —
+      Attrs: orientation, backgroundcolor, textcolor, shadowcolor, width, height<br>
+      Children: <code>&lt;vd-sidepanel&gt;</code> / <code>&lt;vd-mainpanel&gt;</code>
     </div>
     <vd-structure orientation="landscape" backgroundcolor="#f0f4ff" textcolor="#333" width="100%">
       <vd-sidepanel backgroundcolor="#667eea" textcolor="white" width="25%">
         <h4 style="margin-bottom:.5rem;">Sidebar</h4>
-        <p style="font-size:.9rem;">Secondary content, navigation or filters here.</p>
+        <p style="font-size:.9rem;">Secondary content, navigation or filters.</p>
       </vd-sidepanel>
       <vd-mainpanel backgroundcolor="white" textcolor="#333" width="75%">
         <h4 style="margin-bottom:.5rem;">Main Content Area</h4>
-        <p>Primary content goes here. This panel takes most of the horizontal space.</p>
+        <p>Primary content. This panel takes most of the horizontal space.</p>
         <br>
-        <vd-sp bordercolor="#667eea">This is a <code>&lt;vd-sp&gt;</code> bordered section panel inside the main panel.</vd-sp>
+        <vd-sp bordercolor="#667eea">This is a <code>&lt;vd-sp&gt;</code> left-bordered section panel.</vd-sp>
       </vd-mainpanel>
     </vd-structure>
 
-    <h3 style="margin-top:1.5rem;">Text Alignment</h3>
+    <h3>Text Alignment</h3>
     <div class="demo-description"><code>&lt;vd-left&gt;</code> <code>&lt;vd-center&gt;</code> <code>&lt;vd-right&gt;</code></div>
     <vd-left>⬅️ Left-aligned text</vd-left>
     <vd-center>⬛ Centered text</vd-center>
     <vd-right>➡️ Right-aligned text</vd-right>
 
-    <h3>Spacer</h3>
-    <div class="demo-description"><code>&lt;vd-spacer height="30px"&gt;</code> — adds 30px vertical space</div>
-    <div style="background:#f0f4ff;padding:.5rem;border-radius:4px;">Block above spacer</div>
-    <vd-spacer height="30px"></vd-spacer>
-    <div style="background:#f0f4ff;padding:.5rem;border-radius:4px;">Block below spacer (30px gap)</div>
+    <h3>Horizontal Spacer</h3>
+    <div class="demo-description">
+      <code>&lt;vd-spacer distance="N"&gt;</code> — adds N px of horizontal padding on each side of inner content.
+    </div>
+    <div style="display:flex;align-items:center;background:#f0f4ff;padding:.5rem;border-radius:4px;">
+      <span>|A|</span>
+      <vd-spacer distance="30">center</vd-spacer>
+      <span>|B|</span>
+    </div>
   </div>
 
-  <!-- UI DISPLAY -->
+  <!-- ─── UI DISPLAY ────────────────────────────────────────────────────── -->
   <div class="demo-section">
     <h2>🖼️ UI Display Components</h2>
 
     <h3>ColorCard</h3>
-    <div class="demo-description"><code>&lt;vd-colorcard&gt;</code> — customizable card with optional image</div>
+    <div class="demo-description">
+      <code>&lt;vd-colorcard&gt;</code> — Attrs: backgroundcolor, textcolor, shadowcolor, imgsrc, imgwidth, imgheight, width
+    </div>
     <div class="demo-row">
       <vd-colorcard backgroundcolor="#667eea" textcolor="white" shadowcolor="rgba(102,126,234,.4)" width="260px">
-        <h4>Simple Card</h4>
+        <h4>Card without image</h4>
         <p>Basic colorcard with text content only.</p>
       </vd-colorcard>
-      <vd-colorcard backgroundcolor="#1a1a2e" textcolor="white" shadowcolor="rgba(0,0,0,.4)" imgsrc="chatbot.jpg" imgwidth="100%" imgheight="120px" width="260px">
-        <h4>Card with Image</h4>
-        <p>Card with top image and content below.</p>
-        <vd-pill backgroundcolor="#667eea" textcolor="white">Featured</vd-pill>
+      <vd-colorcard backgroundcolor="#1a1a2e" textcolor="white" shadowcolor="rgba(0,0,0,.4)" width="260px">
+        <h4>Dark Card</h4>
+        <p>Dark-themed colorcard with custom styling.</p>
       </vd-colorcard>
       <vd-colorcard backgroundcolor="#e8f5e9" textcolor="#1b5e20" shadowcolor="rgba(76,175,80,.3)" width="260px">
-        <h4>Success Card</h4>
-        <p>Green-themed card for positive states.</p>
+        <h4>Green Card</h4>
+        <p>Light green card for positive content.</p>
       </vd-colorcard>
     </div>
 
     <h3>ColorBadge</h3>
-    <div class="demo-description"><code>&lt;vd-colorbadge&gt;</code> — compact badge with optional icon</div>
+    <div class="demo-description">
+      <code>&lt;vd-colorbadge&gt;</code> — Attrs: backgroundcolor, textcolor, shadowcolor, imgsrc, imgwidth, imgheight, width
+    </div>
     <div class="demo-row">
       <vd-colorbadge backgroundcolor="#667eea" textcolor="white" shadowcolor="rgba(102,126,234,.3)" width="180px">🎨 Design</vd-colorbadge>
       <vd-colorbadge backgroundcolor="#764ba2" textcolor="white" shadowcolor="rgba(118,75,162,.3)" width="180px">💻 Development</vd-colorbadge>
       <vd-colorbadge backgroundcolor="#4caf50" textcolor="white" shadowcolor="rgba(76,175,80,.3)" width="180px">✅ Complete</vd-colorbadge>
     </div>
 
-    <h3>Pill</h3>
-    <div class="demo-description"><code>&lt;vd-pill&gt;</code> — small label/tag component</div>
+    <h3>Pill (circular user badge)</h3>
+    <div class="demo-description">
+      <code>&lt;vd-pill&gt;</code> — Attrs: title, textcolor, width (circular badge with optional background image)<br>
+      ⚠️ Not a label chip — it's a circular profile-style badge.
+    </div>
     <div class="demo-row">
-      <vd-pill backgroundcolor="#667eea" textcolor="white">Design</vd-pill>
-      <vd-pill backgroundcolor="#764ba2" textcolor="white">Code</vd-pill>
-      <vd-pill backgroundcolor="#4caf50" textcolor="white">Done</vd-pill>
-      <vd-pill backgroundcolor="#ff9800" textcolor="white">In Progress</vd-pill>
-      <vd-pill backgroundcolor="#f44336" textcolor="white">Urgent</vd-pill>
+      <vd-pill title="Alice" textcolor="#fff" width="120px">Designer</vd-pill>
+      <vd-pill title="Bob" textcolor="#333" width="120px">Dev</vd-pill>
+      <vd-pill title="Carol" textcolor="#fff" width="120px">PM</vd-pill>
     </div>
 
     <h3>Accordion</h3>
     <div class="demo-description">
-      <code>&lt;vd-accordion&gt;</code> — collapsible panel —
-      <span class="v4-badge">v4 ARIA</span> role=button + aria-expanded + Enter/Space keyboard
+      <code>&lt;vd-accordion&gt;</code> — Attrs: title, backgroundcolor, textcolor, width, headheight, extend<br>
+      <span class="v4-badge">v4 ARIA</span> role=button on header + aria-expanded + Enter/Space keyboard
     </div>
     <vd-accordion title="Section 1 — Click to expand" backgroundcolor="#f0f4ff" textcolor="#333" extend="vertical" width="100%" headheight="50px">
       This is the content of section 1. It can contain any HTML elements.
-      <br><br>
-      <vd-pill backgroundcolor="#667eea" textcolor="white">Accessible</vd-pill>
-      <vd-pill backgroundcolor="#764ba2" textcolor="white">Keyboard</vd-pill>
     </vd-accordion>
     <vd-accordion title="Section 2 — Technical Details" backgroundcolor="#f0f4ff" textcolor="#333" extend="vertical" width="100%" headheight="50px">
-      v4 improvement: header has role=button and aria-expanded is kept in sync as the panel opens/closes.
+      v4: header has role=button and aria-expanded stays in sync as the panel opens/closes.
     </vd-accordion>
 
-    <h3>Alert</h3>
+    <h3>Alert (modal dialog)</h3>
     <div class="demo-description">
-      <code>&lt;vd-alert&gt;</code> — notification banner —
-      <span class="v4-badge">v4 ARIA</span> role=alert + aria-live=assertive
+      <code>&lt;vd-alert&gt;</code> — Attrs: title, backgroundcolor, textcolor, width, height<br>
+      Hidden by default (display:none). Call <code>.show()</code> or set attr <code>open</code> to display.<br>
+      <span class="v4-badge">v4 ARIA</span> role=alert + aria-live=assertive + aria-label
     </div>
-    <vd-alert backgroundcolor="#e3f2fd" textcolor="#1565c0" bordercolor="#1565c0" icon="ℹ️">
-      This is an info alert. Screen readers announce this immediately via aria-live.
+    <vd-alert id="demo-alert" title="Information" backgroundcolor="#1a1a2e" textcolor="white" width="400" height="180">
+      This alert message was triggered programmatically via .show()
     </vd-alert>
-    <vd-spacer height="8px"></vd-spacer>
-    <vd-alert backgroundcolor="#fff8e1" textcolor="#e65100" bordercolor="#ff9800" icon="⚠️">
-      Warning: please review before continuing.
-    </vd-alert>
+    <button class="show-btn" onclick="document.getElementById('demo-alert').show()">Show Alert</button>
 
     <h3>Confirmation Dialog</h3>
     <div class="demo-description">
-      <code>&lt;vd-confirmation&gt;</code> —
+      <code>&lt;vd-confirmation&gt;</code> — Attrs: title, backgroundcolor, textcolor, width, height<br>
+      Hidden by default. Call <code>.show()</code> to display. Fires <code>confirm</code> event: <code>detail.confirmed</code> true/false.<br>
       <span class="v4-badge">v4 ARIA</span> role=dialog + aria-modal + aria-labelledby
     </div>
-    <vd-confirmation title="Confirm Action" backgroundcolor="white" textcolor="#333"
-      confirm-label="Yes, Proceed" cancel-label="Cancel">
-      Are you sure you want to proceed? This action will be permanent.
+    <vd-confirmation id="demo-confirm" title="Confirm Action" backgroundcolor="white" textcolor="#333">
+      Are you sure you want to proceed? This action cannot be undone.
     </vd-confirmation>
+    <button class="show-btn" onclick="document.getElementById('demo-confirm').show()">Show Confirmation</button>
+    <span id="confirm-result" style="margin-left:1rem;font-size:.9rem;color:#555;"></span>
+    <script>
+      document.getElementById('demo-confirm').addEventListener('confirm', function(e) {
+        document.getElementById('confirm-result').textContent = e.detail.confirmed ? '✅ Confirmed' : '❌ Cancelled';
+      });
+    </script>
   </div>
 
-  <!-- FEEDBACK -->
+  <!-- ─── FEEDBACK ──────────────────────────────────────────────────────── -->
   <div class="demo-section">
     <h2>👍 Feedback Components</h2>
     <div class="demo-description">
-      <code>&lt;vd-like&gt;</code> / <code>&lt;vd-dislike&gt;</code> —
-      <span class="v4-badge">v4 ARIA</span> role=button + aria-pressed synced + --vd-success / --vd-error CSS vars
+      <code>&lt;vd-like&gt;</code> / <code>&lt;vd-dislike&gt;</code> — Attrs: backgroundcolor, textcolor, hovercolor, shadowcolor<br>
+      Click to toggle. Counter increments per click.<br>
+      <span class="v4-badge">v4 ARIA</span> role=button + aria-pressed synced to toggle state
     </div>
     <div class="demo-row">
-      <vd-like backgroundcolor="#4caf50" textcolor="white" hovercolor="#388e3c" shadowcolor="rgba(76,175,80,.3)">
-        👍 Like
-      </vd-like>
-      <vd-dislike backgroundcolor="#f44336" textcolor="white" hovercolor="#c62828" shadowcolor="rgba(244,67,54,.3)">
-        👎 Dislike
-      </vd-dislike>
-      <vd-like backgroundcolor="#667eea" textcolor="white" hovercolor="#764ba2" shadowcolor="rgba(102,126,234,.3)" image="thumbup_icon.png">
-        Upvote
-      </vd-like>
+      <vd-like backgroundcolor="#4caf50" textcolor="white" hovercolor="#388e3c" shadowcolor="rgba(76,175,80,.3)">👍 Like</vd-like>
+      <vd-dislike backgroundcolor="#f44336" textcolor="white" hovercolor="#c62828" shadowcolor="rgba(244,67,54,.3)">👎 Dislike</vd-dislike>
+      <vd-like backgroundcolor="#667eea" textcolor="white" hovercolor="#764ba2" shadowcolor="rgba(102,126,234,.3)">Upvote</vd-like>
     </div>
   </div>
 
-  <!-- TABLE -->
+  <!-- ─── TABLE ─────────────────────────────────────────────────────────── -->
   <div class="demo-section">
     <h2>📊 Table Components</h2>
-    <div class="demo-description"><code>&lt;vd-table&gt;</code> with sortable headers via <code>sortable</code> attribute</div>
+    <div class="demo-description">
+      <code>&lt;vd-table&gt;</code> / <code>&lt;vd-tr&gt;</code> / <code>&lt;vd-th sortable&gt;</code> / <code>&lt;vd-td&gt;</code><br>
+      Add <code>sortable</code> attribute to <code>&lt;vd-th&gt;</code> for clickable sort headers.
+    </div>
     <vd-table border="1" width="100%" height="auto">
       <vd-tr>
-        <vd-th sortable>Name</vd-th>
-        <vd-th sortable>Role</vd-th>
-        <vd-th sortable>Status</vd-th>
-        <vd-th sortable>Score</vd-th>
+        <vd-th sortable>Header 1</vd-th>
+        <vd-th sortable>Header 2</vd-th>
+        <vd-th sortable>Header 3</vd-th>
       </vd-tr>
       <vd-tr>
-        <vd-td>Alice Martin</vd-td>
-        <vd-td>UI Designer</vd-td>
-        <vd-td><vd-pill backgroundcolor="#4caf50" textcolor="white">Active</vd-pill></vd-td>
-        <vd-td>98</vd-td>
+        <vd-td>Row 1, Col 1</vd-td>
+        <vd-td>Row 1, Col 2</vd-td>
+        <vd-td>Row 1, Col 3</vd-td>
       </vd-tr>
       <vd-tr>
-        <vd-td>Bob Chen</vd-td>
-        <vd-td>Developer</vd-td>
-        <vd-td><vd-pill backgroundcolor="#667eea" textcolor="white">Remote</vd-pill></vd-td>
-        <vd-td>87</vd-td>
+        <vd-td>Row 2, Col 1</vd-td>
+        <vd-td>Row 2, Col 2</vd-td>
+        <vd-td>Row 2, Col 3</vd-td>
       </vd-tr>
       <vd-tr>
-        <vd-td>Carol Smith</vd-td>
-        <vd-td>Project Manager</vd-td>
-        <vd-td><vd-pill backgroundcolor="#ff9800" textcolor="white">On Leave</vd-pill></vd-td>
-        <vd-td>92</vd-td>
+        <vd-td>Row 3, Col 1</vd-td>
+        <vd-td>Row 3, Col 2</vd-td>
+        <vd-td>Row 3, Col 3</vd-td>
       </vd-tr>
     </vd-table>
   </div>
 
-  <!-- TYPOGRAPHY -->
+  <!-- ─── TYPOGRAPHY ────────────────────────────────────────────────────── -->
   <div class="demo-section">
     <h2>🔤 Typography Helpers</h2>
-    <div class="demo-description"><code>&lt;vd-bi&gt;</code> <code>&lt;vd-bu&gt;</code> <code>&lt;vd-iu&gt;</code> — inline text styling</div>
+    <div class="demo-description"><code>&lt;vd-bi&gt;</code> <code>&lt;vd-bu&gt;</code> <code>&lt;vd-iu&gt;</code> — inline text styling combos</div>
     <p>This is <vd-bi>bold italic text</vd-bi> in a sentence.</p>
     <p>This is <vd-bu>bold underlined text</vd-bu> in a sentence.</p>
     <p>This is <vd-iu>italic underlined text</vd-iu> in a sentence.</p>
   </div>
 
-  <!-- VISUALIZATION MACRO -->
+  <!-- ─── VISUALIZATION ─────────────────────────────────────────────────── -->
   <div class="demo-section">
     <h2>📈 Visualization Components</h2>
 
     <h3>Timeline</h3>
     <div class="demo-description">
-      <code>&lt;vd-timeline&gt;</code> / <code>&lt;vd-timeline-item&gt;</code> —
-      <span class="v4-badge">v4 ARIA</span> role=list + role=listitem
+      <code>&lt;vd-timeline&gt;</code> — Attrs: title, backgroundcolor, textcolor, shadowcolor, width<br>
+      <code>&lt;vd-timeline-item&gt;</code> — Attrs: date, title, backgroundcolor, textcolor, width<br>
+      <span class="v4-badge">v4 ARIA</span> role=list on timeline + role=listitem on each item
     </div>
     <vd-timeline title="Project Milestones" backgroundcolor="#f8f9fa" textcolor="#333" shadowcolor="rgba(0,0,0,.1)" width="100%">
       <vd-timeline-item date="Q1 2025" title="Kickoff" backgroundcolor="white" textcolor="#333">
@@ -298,8 +310,8 @@
 
     <h3>Progress Circle</h3>
     <div class="demo-description">
-      <code>&lt;vd-progresscircle&gt;</code> —
-      <span class="v4-badge">v4 ARIA</span> role=progressbar + aria-valuenow/min/max + --vd-primary default
+      <code>&lt;vd-progresscircle value="N" color="..." width="..."&gt;</code><br>
+      <span class="v4-badge">v4 ARIA</span> role=progressbar + aria-valuenow/min/max
     </div>
     <div class="demo-row" style="text-align:center;">
       <div>
@@ -322,7 +334,7 @@
 
     <h3>Countdown</h3>
     <div class="demo-description">
-      <code>&lt;vd-countdown&gt;</code> —
+      <code>&lt;vd-countdown end="ISO-date" backgroundcolor="..." textcolor="..."&gt;</code><br>
       <span class="v4-badge">v4 ARIA</span> role=timer + aria-label
     </div>
     <vd-center>
@@ -330,123 +342,132 @@
     </vd-center>
   </div>
 
-  <!-- TABS MACRO -->
+  <!-- ─── TABS ──────────────────────────────────────────────────────────── -->
   <div class="demo-section">
     <h2>🗂️ Tab Components</h2>
     <div class="demo-description">
-      <code>&lt;vd-tabcontrol&gt;</code> / <code>&lt;vd-tab&gt;</code> —
-      <span class="v4-badge">v4 ARIA</span> role=tablist + role=tab + aria-selected
+      <code>&lt;vd-tabcontrol&gt;</code> — Attrs: width, backgroundcolor, textcolor, shadowcolor<br>
+      <code>&lt;vd-tab title="..."&gt;</code> — Attrs: title, backgroundcolor, textcolor, active<br>
+      <span class="v4-badge">v4 ARIA</span> role=tablist on tabcontrol + role=tab + aria-selected on each tab
     </div>
-    <vd-tabcontrol backgroundcolor="white" textcolor="#333" activecolor="#667eea">
-      <vd-tab label="Overview" active="true">
+    <vd-tabcontrol backgroundcolor="white" textcolor="#333" shadowcolor="rgba(0,0,0,.1)">
+      <vd-tab title="Overview" active="true">
         <h4>VD Framework 4</h4>
-        <p>Zero-dependency Web Components library for modern HTML pages. 46 custom elements, full ARIA, theme system.</p>
-        <br>
-        <vd-pill backgroundcolor="#667eea" textcolor="white">Zero Dependencies</vd-pill>
-        <vd-pill backgroundcolor="#4caf50" textcolor="white">ARIA Ready</vd-pill>
-        <vd-pill backgroundcolor="#764ba2" textcolor="white">Theme System</vd-pill>
+        <p>Zero-dependency Web Components library. 46 custom elements, full ARIA, theme system.</p>
       </vd-tab>
-      <vd-tab label="Components">
+      <vd-tab title="Components">
         <h4>46 Custom Elements</h4>
-        <p>30 base components in global.js + 15 macro components in macrocomponents.js + 1 theme component.</p>
+        <p>30 base components (global.js) + 15 macro components (macrocomponents.js) + 1 theme component.</p>
       </vd-tab>
-      <vd-tab label="v4 Changes">
+      <vd-tab title="v4 Changes">
         <h4>What's New in v4</h4>
         <ul style="padding-left:1.5rem;line-height:2;">
           <li>🎨 <code>&lt;vd-theme&gt;</code> — CSS custom properties system</li>
           <li>♿ Full ARIA on 20 interactive components</li>
           <li>⌨️ Keyboard navigation on all interactive elements</li>
           <li>🔐 <code>openai_proxy.php</code> — secure API key handling</li>
-          <li>🧱 <code>VDBaseElement</code> — unified base class for all 45 components</li>
+          <li>🧱 <code>VDBaseElement</code> — unified base class</li>
           <li>🧹 <code>VDUtils</code> — shared utility helpers</li>
         </ul>
       </vd-tab>
     </vd-tabcontrol>
   </div>
 
-  <!-- CAROUSEL MACRO -->
+  <!-- ─── CAROUSEL ─────────────────────────────────────────────────────── -->
   <div class="demo-section">
     <h2>🎠 Carousel</h2>
     <div class="demo-description">
-      <code>&lt;vd-carousel&gt;</code> —
+      <code>&lt;vd-carousel width="..." height="..." speed="ms" direction="left|right" stoponhover="true"&gt;</code><br>
       <span class="v4-badge">v4 ARIA</span> role=region + aria-roledescription=carousel
     </div>
     <vd-center>
       <vd-carousel width="600px" height="200px" speed="800" direction="left" stoponhover="true" backgroundcolor="#1a1a2e">
         <vd-colorcard backgroundcolor="#667eea" textcolor="white" width="280px">
-          <h4>Slide 1</h4><p>First carousel item content.</p>
+          <h4>Slide 1</h4><p>First carousel item.</p>
         </vd-colorcard>
         <vd-colorcard backgroundcolor="#764ba2" textcolor="white" width="280px">
-          <h4>Slide 2</h4><p>Second carousel item content.</p>
+          <h4>Slide 2</h4><p>Second carousel item.</p>
         </vd-colorcard>
         <vd-colorcard backgroundcolor="#4caf50" textcolor="white" width="280px">
-          <h4>Slide 3</h4><p>Third carousel item content.</p>
+          <h4>Slide 3</h4><p>Third carousel item.</p>
         </vd-colorcard>
       </vd-carousel>
     </vd-center>
   </div>
 
-  <!-- CHAT MACRO -->
+  <!-- ─── CHAT ─────────────────────────────────────────────────────────── -->
   <div class="demo-section">
     <h2>💬 Chat Components</h2>
     <div class="demo-description">
-      <code>&lt;vd-chatbox&gt;</code> / <code>&lt;vd-chatline&gt;</code> / <code>&lt;vd-inputbox&gt;</code> —
-      <span class="v4-badge">v4 ARIA</span> chatbox: role=log + aria-live=polite; inputbox: aria-label on textarea
+      <code>&lt;vd-chatbox&gt;</code> — Attrs: backgroundcolor, textcolor, shadowcolor, width<br>
+      <code>&lt;vd-chatline user="..."&gt;</code> — Attrs: user, backgroundcolor, textcolor<br>
+      <code>&lt;vd-inputbox placeholder="..." rows="N" verifyenter="true"&gt;</code> — fires <code>verifypress</code> event<br>
+      <span class="v4-badge">v4 ARIA</span> chatbox: role=log + aria-live=polite; inputbox textarea: aria-label
     </div>
     <vd-chatbox backgroundcolor="white" textcolor="#333" shadowcolor="rgba(0,0,0,.1)" width="500px" id="demo-chat">
       <vd-chatline user="Alice">Hey, have you seen the new VD Framework docs?</vd-chatline>
       <vd-chatline user="Bob">Yes! The ARIA improvements are great for accessibility.</vd-chatline>
       <vd-chatline user="Alice">And the theme system is very handy!</vd-chatline>
     </vd-chatbox>
-    <vd-inputbox placeholder="Type a message and press Send..." backgroundcolor="white" textcolor="#333" buttoncolor="#667eea" id="demo-input">
-    </vd-inputbox>
+    <vd-inputbox id="demo-input" placeholder="Type a message and press Enter..." rows="1" verifyenter="true"></vd-inputbox>
     <script>
-      document.getElementById('demo-input').addEventListener('vd-send', function(e) {
+      document.getElementById('demo-input').addEventListener('verifypress', function(e) {
         var box = document.getElementById('demo-chat');
         var line = document.createElement('vd-chatline');
         line.setAttribute('user', 'You');
-        line.textContent = e.detail.value;
+        line.textContent = e.detail;
         box.appendChild(line);
+        document.getElementById('demo-input').value = '';
       });
     </script>
   </div>
 
-  <!-- AI MACRO -->
+  <!-- ─── AI ───────────────────────────────────────────────────────────── -->
   <div class="demo-section">
     <h2>🤖 AI Components</h2>
     <div class="demo-description">
-      <code>&lt;vd-chatbot&gt;</code> and <code>&lt;vd-dalle&gt;</code> require <code>openai_proxy.php</code> on the same server.
-      <span class="v4-badge">Security v4</span> API key is stored as server env var — never exposed client-side.
+      <code>&lt;vd-chatbot&gt;</code> — Attrs: name, bgcolor, color, chatcolor, typingindicator, input-rows, input-placeholder<br>
+      <code>&lt;vd-dalle&gt;</code> — Attrs: name, bgcolor, color, imagesize, imagenumber, download, input-rows, input-placeholder<br>
+      Both require <code>openai_proxy.php</code> on the same server.
+      <span class="v4-badge">Security v4</span> API key is a server env var — never exposed client-side.
     </div>
     <div class="demo-row">
-      <vd-chatbot title="GPT-4 Chat" backgroundcolor="#1a1a2e" textcolor="white" width="460px" height="500px" model="gpt-4o">
+      <vd-chatbot name="GPT-4 Assistant" bgcolor="#1a1a2e" color="white" chatcolor="#f9f9f9" typingindicator="true" input-rows="2" input-placeholder="Ask me anything...">
       </vd-chatbot>
-      <vd-dalle title="DALL-E 3 Images" backgroundcolor="#1a1a2e" textcolor="white" width="460px">
+      <vd-dalle name="DALL·E 3 Generator" bgcolor="#1a1a2e" color="white" imagesize="512x512" imagenumber="1" download="true" input-rows="3">
       </vd-dalle>
     </div>
   </div>
 
-  <!-- MEDIA MACRO -->
+  <!-- ─── MEDIA ─────────────────────────────────────────────────────────── -->
   <div class="demo-section">
     <h2>🎬 Media Components</h2>
-    <div class="demo-description"><code>&lt;vd-video&gt;</code> and <code>&lt;vd-music&gt;</code> — HTML5 media players</div>
+    <div class="demo-description">
+      <code>&lt;vd-video file="path.mp4" title="..." backgroundcolor="..." textcolor="..." bordercolor="..."&gt;</code><br>
+      <code>&lt;vd-music file="path.mp3" title="..." backgroundcolor="..." textcolor="..." bordercolor="..."&gt;</code><br>
+      ⚠️ Use <code>file</code> attribute (not <code>src</code>). Replace paths with real files on your server.
+    </div>
     <div class="demo-row">
       <div>
         <h3>Video Player</h3>
-        <vd-video src="demo.mp4" width="400px" height="225px" controls="true" autoplay="false" loop="false"></vd-video>
+        <p style="font-size:.85rem;color:#888;margin-bottom:.5rem;">Replace <code>file</code> with a real .mp4 path</p>
+        <vd-video file="demo.mp4" title="Sample Video" backgroundcolor="#000" textcolor="#fff" bordercolor="#444"></vd-video>
       </div>
       <div>
         <h3>Music Player</h3>
-        <vd-music src="demo.mp3" backgroundcolor="#1a1a2e" textcolor="white" autoplay="false" loop="false"></vd-music>
+        <p style="font-size:.85rem;color:#888;margin-bottom:.5rem;">Replace <code>file</code> with a real .mp3 path</p>
+        <vd-music file="demo.mp3" title="Sample Track" backgroundcolor="#222" textcolor="#fff" bordercolor="#555"></vd-music>
       </div>
     </div>
   </div>
 
-  <!-- PLANNER MACRO -->
+  <!-- ─── PLANNER ───────────────────────────────────────────────────────── -->
   <div class="demo-section">
     <h2>📅 Planner</h2>
     <div class="demo-description">
-      <code>&lt;vd-planner&gt;</code> — full calendar/task planner. Requires <code>calendar-backend.php</code> + writable <code>tasks.json</code>.
+      <code>&lt;vd-planner backgroundcolor="..." textcolor="..." width="..." backend="calendar-backend.php"&gt;</code><br>
+      ⚠️ Requires <code>calendar-backend.php</code> + writable <code>tasks.json</code> on your server.
+      Without the backend the planner still renders but task persistence is disabled.
     </div>
     <vd-planner backgroundcolor="white" textcolor="#333" width="100%" backend="calendar-backend.php"></vd-planner>
   </div>
