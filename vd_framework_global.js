@@ -36,22 +36,20 @@ class VDRadioNav extends VDBaseElement {
   connectedCallback() { this.render(); }
   attributeChangedCallback() { if (this.isConnected) this.render(); }
   render() {
-    this.shadowRoot.innerHTML = "";
-    this.shadowRoot.appendChild(VDUtils.buildStyle(`
-      .nav { display:flex; justify-content:var(--align); background-color:var(--backgroundcolor); padding:10px; border-radius:8px; }
-    `));
-    const wrapper = document.createElement("div");
-    wrapper.className = "nav";
-    // Phase 3: ARIA
-    wrapper.setAttribute("role",       "radiogroup");
-    wrapper.setAttribute("aria-label", this.getAttribute("label") || "Navigation options");
-    wrapper.style.setProperty("--backgroundcolor", this.getAttribute("backgroundcolor"));
-    wrapper.style.setProperty("--align", this.getAttribute("align"));
-    Array.from(this.children).forEach((child) => {
-      child.style.setProperty("--textcolor", this.getAttribute("textcolor"));
-      wrapper.appendChild(child);
-    });
-    this.shadowRoot.appendChild(wrapper);
+    const bg    = this.getAttribute("backgroundcolor") || "transparent";
+    const align = this.getAttribute("align")           || "flex-start";
+    const label = this.getAttribute("label")           || "Navigation options";
+    if (!this.shadowRoot.querySelector("style")) {
+      this.shadowRoot.innerHTML = `
+        <style>
+          :host { display:block; }
+          .nav { display:flex; flex-wrap:wrap; justify-content:var(--nav-align,flex-start);
+                 background-color:var(--nav-bg,transparent); padding:10px; border-radius:8px; }
+        </style>
+        <div class="nav" role="radiogroup" aria-label="${label}"><slot></slot></div>`;
+    }
+    this.style.setProperty("--nav-bg",    bg);
+    this.style.setProperty("--nav-align", align);
   }
 }
 
@@ -134,21 +132,23 @@ class VDSkewNav extends VDBaseElement {
   connectedCallback() { this.render(); }
   attributeChangedCallback() { if (this.isConnected) this.render(); }
   render() {
-    this.shadowRoot.innerHTML = "";
-    this.shadowRoot.appendChild(VDUtils.buildStyle(`
-      .nav { display:flex; justify-content:var(--align); background-color:var(--backgroundcolor);
-             box-shadow:0 4px 8px var(--shadowcolor); padding:10px; border-radius:8px; }
-    `));
-    const wrapper = document.createElement("div");
-    wrapper.className = "nav";
-    // Phase 3: ARIA
-    wrapper.setAttribute("role",       "navigation");
-    wrapper.setAttribute("aria-label", this.getAttribute("label") || "Navigation");
-    wrapper.style.setProperty("--backgroundcolor", this.getAttribute("backgroundcolor"));
-    wrapper.style.setProperty("--shadowcolor",     this.getAttribute("shadowcolor"));
-    wrapper.style.setProperty("--align",           this.getAttribute("align"));
-    Array.from(this.children).forEach((child) => wrapper.appendChild(child));
-    this.shadowRoot.appendChild(wrapper);
+    const bg     = this.getAttribute("backgroundcolor") || "transparent";
+    const shadow = this.getAttribute("shadowcolor")     || "transparent";
+    const align  = this.getAttribute("align")           || "flex-start";
+    const label  = this.getAttribute("label")           || "Navigation";
+    if (!this.shadowRoot.querySelector("style")) {
+      this.shadowRoot.innerHTML = `
+        <style>
+          :host { display:block; }
+          .nav { display:flex; flex-wrap:wrap; justify-content:var(--nav-align,flex-start);
+                 background-color:var(--nav-bg,transparent);
+                 box-shadow:0 4px 8px var(--nav-shadow,transparent); padding:10px; border-radius:8px; }
+        </style>
+        <div class="nav" role="navigation" aria-label="${label}"><slot></slot></div>`;
+    }
+    this.style.setProperty("--nav-bg",     bg);
+    this.style.setProperty("--nav-shadow", shadow);
+    this.style.setProperty("--nav-align",  align);
   }
 }
 
@@ -182,21 +182,23 @@ class VDPopNav extends VDBaseElement {
   connectedCallback() { this.render(); }
   attributeChangedCallback() { if (this.isConnected) this.render(); }
   render() {
-    this.shadowRoot.innerHTML = "";
-    this.shadowRoot.appendChild(VDUtils.buildStyle(`
-      .nav { display:flex; justify-content:var(--align); background-color:var(--backgroundcolor);
-             box-shadow:0 4px 8px var(--shadowcolor); padding:10px; border-radius:8px; }
-    `));
-    const wrapper = document.createElement("div");
-    wrapper.className = "nav";
-    // Phase 3: ARIA
-    wrapper.setAttribute("role",       "navigation");
-    wrapper.setAttribute("aria-label", this.getAttribute("label") || "Navigation");
-    wrapper.style.setProperty("--backgroundcolor", this.getAttribute("backgroundcolor"));
-    wrapper.style.setProperty("--shadowcolor",     this.getAttribute("shadowcolor"));
-    wrapper.style.setProperty("--align",           this.getAttribute("align"));
-    Array.from(this.children).forEach((child) => wrapper.appendChild(child));
-    this.shadowRoot.appendChild(wrapper);
+    const bg     = this.getAttribute("backgroundcolor") || "transparent";
+    const shadow = this.getAttribute("shadowcolor")     || "transparent";
+    const align  = this.getAttribute("align")           || "flex-start";
+    const label  = this.getAttribute("label")           || "Navigation";
+    if (!this.shadowRoot.querySelector("style")) {
+      this.shadowRoot.innerHTML = `
+        <style>
+          :host { display:block; }
+          .nav { display:flex; flex-wrap:wrap; justify-content:var(--nav-align,flex-start);
+                 background-color:var(--nav-bg,transparent);
+                 box-shadow:0 4px 8px var(--nav-shadow,transparent); padding:10px; border-radius:8px; }
+        </style>
+        <div class="nav" role="navigation" aria-label="${label}"><slot></slot></div>`;
+    }
+    this.style.setProperty("--nav-bg",     bg);
+    this.style.setProperty("--nav-shadow", shadow);
+    this.style.setProperty("--nav-align",  align);
   }
 }
 

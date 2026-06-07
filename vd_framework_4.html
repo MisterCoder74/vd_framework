@@ -181,13 +181,15 @@
 
     <h3>Pill (circular user badge)</h3>
     <div class="demo-description">
-      <code>&lt;vd-pill&gt;</code> — Attrs: title, textcolor, width (circular badge with optional background image)<br>
-      ⚠️ Not a label chip — it's a circular profile-style badge.
+      <code>&lt;vd-pill title="..." textcolor="..." width="..." image="url"&gt;body text&lt;/vd-pill&gt;</code><br>
+      Circular profile-style badge. <code>title</code> = heading in top half, body text = bottom half,
+      <code>image</code> = optional background image URL, <code>width</code> = diameter.<br>
+      ⚠️ Use a dark <code>textcolor</code> when no background image is set.
     </div>
     <div class="demo-row">
-      <vd-pill title="Alice" textcolor="#fff" width="120px">Designer</vd-pill>
-      <vd-pill title="Bob" textcolor="#333" width="120px">Dev</vd-pill>
-      <vd-pill title="Carol" textcolor="#fff" width="120px">PM</vd-pill>
+      <vd-pill title="Alice" textcolor="#333" width="140px">Designer</vd-pill>
+      <vd-pill title="Bob" textcolor="#333" width="140px">Developer</vd-pill>
+      <vd-pill title="Carol" textcolor="#333" width="140px">PM</vd-pill>
     </div>
 
     <h3>Accordion</h3>
