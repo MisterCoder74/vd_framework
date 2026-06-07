@@ -7,7 +7,7 @@
  *   <script src="vd_framework_global.js"></script>
  *   <script src="vd_framework_macrocomponents.js"></script>
  *
- * @version 4.0
+ * @version 4.0 (Phase 2: shadowMode support)
  * @author  Vivacity Design — https://www.vivacitydesign.net
  */
 
@@ -24,9 +24,17 @@
    ============================================================================= */
 
 class VDBaseElement extends HTMLElement {
+  /**
+   * Override in subclass to skip Shadow DOM creation:
+   *   static get shadowMode() { return "none"; }
+   * Use for light-DOM components (VDTable, VdAlert, VdCarousel, etc.)
+   */
   constructor() {
     super();
-    this.attachShadow({ mode: 'open' });
+    // v4 Phase 2: skip shadow DOM for light-DOM components
+    if (new.target.shadowMode !== 'none') {
+      this.attachShadow({ mode: 'open' });
+    }
 
     // Internal registries — populated via the helper methods below.
     this._listeners = [];  // { target, event, handler, options }

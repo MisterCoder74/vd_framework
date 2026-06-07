@@ -18,7 +18,6 @@
 </head>
 <body>
 
-  <!-- Your VD components go here -->
   <vd-structure orientation="landscape" backgroundcolor="#f5f5f5">
     <vd-mainpanel>
       <vd-colorcard backgroundcolor="#667eea" textcolor="white" width="300px">
@@ -27,13 +26,15 @@
     </vd-mainpanel>
   </vd-structure>
 
-  <!-- Load order is mandatory: utils → global → macrocomponents -->
+  <!-- Load order is mandatory -->
   <script src="vd_framework_utils.js"></script>
   <script src="vd_framework_global.js"></script>
   <script src="vd_framework_macrocomponents.js"></script>
 </body>
 </html>
 ```
+
+> ⚠️ All script `src` paths must be **relative** (no leading `/`).
 
 ---
 
@@ -43,11 +44,11 @@
 
 ```
 vd_framework/
-├── vd_framework_utils.js          ← Phase 1 ✅  Foundation layer (load first)
-├── vd_framework_global.js         ← Phase 2 🔄  30 base components
-├── vd_framework_macrocomponents.js← Phase 2 🔄  15 complex components
-├── openai_proxy.php               ← Phase 1 ✅  Secure OpenAI proxy (server-side)
-├── calendar-backend.php           ←             Task persistence for vd-planner
+├── vd_framework_utils.js           ← Phase 1+2 ✅  Foundation layer (load first)
+├── vd_framework_global.js          ← Phase 2 ✅   30 base components
+├── vd_framework_macrocomponents.js ← Phase 2 ✅   15 complex components
+├── openai_proxy.php                ← Phase 1 ✅   Secure OpenAI proxy (server-side)
+├── calendar-backend.php            ←              Task persistence for vd-planner
 └── README.md
 ```
 
@@ -60,8 +61,6 @@ vd_framework_global.js
        ↓
 vd_framework_macrocomponents.js
 ```
-
-> ⚠️ All script `src` paths must be **relative** (no leading `/`).
 
 ---
 
@@ -82,7 +81,8 @@ vd_framework_macrocomponents.js
 
 | Category | Components |
 |---|---|
-| **AI** | `vd-chatbot` (GPT-4), `vd-dalle` (DALL-E 3), `vd-chatbox`, `vd-chatline`, `vd-inputbox` |
+| **AI** | `vd-chatbot` (GPT-4), `vd-dalle` (DALL-E 3) |
+| **Chat UI** | `vd-chatbox`, `vd-chatline`, `vd-inputbox` |
 | **Interactive** | `vd-planner` (calendar + PHP backend), `vd-tabcontrol`, `vd-tab`, `vd-carousel` |
 | **Visualization** | `vd-timeline`, `vd-timeline-item`, `vd-progresscircle`, `vd-countdown` |
 | **Media** | `vd-video`, `vd-music` |
@@ -91,7 +91,7 @@ vd_framework_macrocomponents.js
 
 ## 🔐 OpenAI Integration (vd-chatbot, vd-dalle)
 
-v4 uses a **server-side PHP proxy** (`openai_proxy.php`) to keep the API key secure.  
+v4 uses a **server-side PHP proxy** (`openai_proxy.php`) to keep the API key secure.
 The browser never sees the key — it only communicates with `openai_proxy.php`.
 
 ### Setup
@@ -105,6 +105,32 @@ SetEnv OPENAI_API_KEY sk-...yourkey...
 Create a `.env` file **one directory above** your `public_html` / webroot:
 ```
 OPENAI_API_KEY=sk-...yourkey...
+```
+
+### Component attributes
+
+```html
+<!-- Optional: custom proxy path -->
+<vd-chatbot
+  proxy="openai_proxy.php"
+  name="My Assistant"
+  model="gpt-4o-mini"
+  bgcolor="#1a1a2e"
+  color="white"
+  chatcolor="#f0f0f0"
+  typingindicator="true"
+  input-rows="3"
+  input-placeholder="Ask me anything...">
+</vd-chatbot>
+
+<vd-dalle
+  proxy="openai_proxy.php"
+  name="Image Generator"
+  model="dall-e-3"
+  imagesize="1024x1024"
+  imagenumber="1"
+  download="true">
+</vd-dalle>
 ```
 
 > ⚠️ Never put `key.ini` or `.env` inside the webroot. Never commit API keys to version control.
@@ -132,27 +158,23 @@ class MyComponent extends VDBaseElement {
   }
 
   render() {
-    this.shadowRoot.innerHTML = '';
-    this.shadowRoot.appendChild(VDUtils.buildStyle(`
-      .box { color: ${VDUtils.attr(this, 'color', '#000')}; }
-    `));
-
-    const btn = document.createElement('button');
-    btn.textContent = VDUtils.attr(this, 'label', 'Click me');
-
-    // ✅ Registered listener — auto-removed on disconnect
-    this._addListener(btn, 'click', () => console.log('clicked'));
-
-    // ✅ Accessible by default
-    this._makeAccessible(btn, {
-      label: VDUtils.attr(this, 'label', 'Action button'),
-      keyAction: () => console.log('keyboard activated')
-    });
-
-    this.shadowRoot.appendChild(btn);
+    this.shadowRoot.innerHTML = `
+      <style>
+        .box { color: ${VDUtils.attr(this, 'color', '#000')}; }
+      </style>
+      <div class="box">${VDUtils.sanitizeHTML(VDUtils.attr(this, 'label', 'Hello'))}</div>
+    `;
   }
 }
-customElements.define('my-component', MyComponent);
+
+// Light DOM component (no shadow root):
+class MyLightComponent extends VDBaseElement {
+  static get shadowMode() { return "none"; }
+
+  connectedCallback() {
+    this.innerHTML = `<span>${VDUtils.sanitizeHTML(this.getAttribute("text"))}</span>`;
+  }
+}
 ```
 
 ### VDBaseElement API
@@ -164,6 +186,7 @@ customElements.define('my-component', MyComponent);
 | `_addTimeout(fn, delay)` | Register a timeout — auto-cleared on disconnect |
 | `_makeAccessible(el, { label, role, keyAction })` | Add ARIA role, aria-label, tabindex and keyboard handler |
 | `disconnectedCallback()` | Auto-cleanup (override with `super.disconnectedCallback()`) |
+| `static get shadowMode()` | Return `"none"` to skip shadow DOM (light DOM components) |
 
 ---
 
@@ -182,12 +205,31 @@ Static utility object available globally as `window.VDUtils`.
 
 ---
 
+## 📄 Phase 2 Migration Notes
+
+All 45 components migrated to `VDBaseElement` in v4.
+
+### Changes applied globally
+
+| Change | Details |
+|---|---|
+| `extends VDBaseElement` | All 45 components — replaces `extends HTMLElement` |
+| `this.attachShadow()` removed | `VDBaseElement` handles shadow DOM creation |
+| `innerHTML +=` fixed | `VdStructure`, `VdSidepanel`, `VdMainpanel` now use `<slot>` |
+| `addEventListener` → `_addListener()` | Automatic cleanup on disconnect |
+| `setInterval` → `_addInterval()` | Auto-cleared on disconnect (`VdCountdown`, `VdCarousel`, `VdPlanner`) |
+| `setTimeout` → `_addTimeout()` | Auto-cleared on disconnect |
+| Light DOM flag | `static get shadowMode() { return "none"; }` on `VDTable`, `VDTR`, `VDTH`, `VDTD`, `VdAlert`, `VdConfirmation`, `hspacer`, `VdCarousel` |
+| AI proxy | `VdChatbot` + `VdDalle`: replaced `fetch("key.ini")` + direct OpenAI calls with `VDUtils.openaiRequest()` via `openai_proxy.php` |
+
+---
+
 ## 🗺️ Development Phases
 
 | Phase | Status | Description |
 |---|---|---|
 | **Phase 1 — Foundation** | ✅ Done | `vd_framework_utils.js` (VDBaseElement + VDUtils), `openai_proxy.php` |
-| **Phase 2 — Refactoring** | 🔄 Next | Migrate all 45 components to `VDBaseElement`, unify render pattern, remove `innerHTML +=` |
+| **Phase 2 — Refactoring** | ✅ Done | All 45 components migrated to `VDBaseElement`, unified render pattern, `<slot>` fix, `_addListener/_addInterval`, AI proxy |
 | **Phase 3 — UX & DX** | 📋 Planned | `<vd-theme>` theming system, full ARIA coverage, keyboard navigation |
 
 ---
