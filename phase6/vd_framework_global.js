@@ -925,10 +925,10 @@ class VdButton extends VDBaseElement {
       </style>
       ${href && !disabled
         ? `<a class="vd-btn" href="${VDUtils.sanitizeHTML(href)}" target="${VDUtils.sanitizeHTML(target)}"
-              role="button" aria-label="${VDUtils.sanitizeHTML(label||'link')}">${iconHtml}<slot>${VDUtils.sanitizeHTML(label)}</slot></a>`
+              role="button" aria-label="${VDUtils.sanitizeHTML(label||'link')}">${iconHtml}${VDUtils.sanitizeHTML(label)}</a>`
         : `<button class="vd-btn" type="${btnType === "submit" ? "submit" : "button"}"
                    aria-label="${VDUtils.sanitizeHTML(label||'button')}"
-                   ${disabled ? "disabled" : ""}>${iconHtml}<slot>${VDUtils.sanitizeHTML(label)}</slot></button>`
+                   ${disabled ? "disabled" : ""}>${iconHtml}${VDUtils.sanitizeHTML(label)}</button>`
       }`;
 
     const el = this.shadowRoot.querySelector(".vd-btn");
@@ -980,7 +980,7 @@ class VdChip extends VDBaseElement {
       </style>
       <span class="chip" role="button" tabindex="0" aria-label="${VDUtils.sanitizeHTML(label)}">
         ${icon ? `<span class="chip-icon">${icon}</span>` : ""}
-        <slot>${VDUtils.sanitizeHTML(label)}</slot>
+        ${VDUtils.sanitizeHTML(label)}<slot></slot>
         ${removable ? `<button class="rm" aria-label="Remove">&#x2715;</button>` : ""}
       </span>`;
 
