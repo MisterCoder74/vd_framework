@@ -102,7 +102,8 @@ class VDRadioLink extends VDBaseElement {
     if (isActive)   radio.checked = true;
     const linkText = document.createElement("span");
     linkText.className = "link-text";
-    linkText.innerHTML = this.innerHTML;
+    // Use <slot> projection — avoids relying on this.innerHTML at connectedCallback time
+    linkText.appendChild(document.createElement("slot"));
     container.appendChild(radio);
     container.appendChild(linkText);
     this._addListener(radio,     "change", () => this._selectLink());
@@ -157,23 +158,26 @@ class VDSkewLink extends VDBaseElement {
   connectedCallback() { this.render(); }
   attributeChangedCallback() { if (this.isConnected) this.render(); }
   render() {
-    this.shadowRoot.innerHTML = "";
-    this.shadowRoot.appendChild(VDUtils.buildStyle(`
-      .link { display:inline-block; margin:0 2px; background-color:var(--skewcolor); color:var(--textcolor);
-              padding:10px 15px; border-radius:5px; transform:skew(-30deg); transition:background-color 0.3s; text-decoration:none; font-weight:bold; }
-      .link:hover { background-color:var(--hovercolor); }
-    `));
-    const link = document.createElement("a");
-    link.className = "link";
-    link.href   = this.getAttribute("url");
-    link.target = this.getAttribute("target");
-    link.style.setProperty("--skewcolor",  this.getAttribute("skewcolor"));
-    link.style.setProperty("--textcolor",  this.getAttribute("textcolor"));
-    link.style.setProperty("--hovercolor", this.getAttribute("hovercolor"));
-    link.setAttribute("role", "menuitem");
-    this._makeAccessible(link, { label: this.textContent.trim(), role: "menuitem", keyAction: () => link.click() });
-    link.innerHTML = this.innerHTML;
-    this.shadowRoot.appendChild(link);
+    // Use <slot> so text content works regardless of when scripts are loaded (head vs end-of-body)
+    const url   = this.getAttribute("url")       || "#";
+    const tgt   = this.getAttribute("target")    || "";
+    const sc    = this.getAttribute("skewcolor") || "transparent";
+    const tc    = this.getAttribute("textcolor") || "#fff";
+    const hc    = this.getAttribute("hovercolor")|| sc;
+    this.shadowRoot.innerHTML = `
+      <style>
+        :host { display: inline-block; }
+        a.link {
+          display: inline-block; margin: 0 2px;
+          background-color: ${sc}; color: ${tc};
+          padding: 10px 15px; border-radius: 5px; transform: skew(-30deg);
+          transition: background-color 0.3s; text-decoration: none; font-weight: bold;
+        }
+        a.link:hover { background-color: ${hc}; }
+      </style>
+      <a class="link" href="${url}" target="${tgt}" role="menuitem"><slot></slot></a>`;
+    const link = this.shadowRoot.querySelector("a.link");
+    this._makeAccessible(link, { role: "menuitem", keyAction: () => link.click() });
   }
 }
 
@@ -207,23 +211,26 @@ class VDPopLink extends VDBaseElement {
   connectedCallback() { this.render(); }
   attributeChangedCallback() { if (this.isConnected) this.render(); }
   render() {
-    this.shadowRoot.innerHTML = "";
-    this.shadowRoot.appendChild(VDUtils.buildStyle(`
-      .link { display:inline-block; margin:0 4px; background-color:var(--backgroundcolor); color:var(--textcolor);
-              padding:10px 15px; border-radius:5px; transition:all 0.3s linear; text-decoration:none; font-weight:bold; }
-      .link:hover { transform:scale(1.2); background-color:var(--hovercolor); z-index:1; }
-    `));
-    const link = document.createElement("a");
-    link.className = "link";
-    link.href   = this.getAttribute("url");
-    link.target = this.getAttribute("target");
-    link.style.setProperty("--backgroundcolor", this.getAttribute("backgroundcolor"));
-    link.style.setProperty("--textcolor",       this.getAttribute("textcolor"));
-    link.style.setProperty("--hovercolor",      this.getAttribute("hovercolor"));
-    link.setAttribute("role", "menuitem");
-    this._makeAccessible(link, { label: this.textContent.trim(), role: "menuitem", keyAction: () => link.click() });
-    link.innerHTML = this.innerHTML;
-    this.shadowRoot.appendChild(link);
+    // Use <slot> so text content works regardless of when scripts are loaded (head vs end-of-body)
+    const url = this.getAttribute("url")             || "#";
+    const tgt = this.getAttribute("target")          || "";
+    const bg  = this.getAttribute("backgroundcolor") || "transparent";
+    const tc  = this.getAttribute("textcolor")       || "inherit";
+    const hc  = this.getAttribute("hovercolor")      || "var(--vd-primary,#667eea)";
+    this.shadowRoot.innerHTML = `
+      <style>
+        :host { display: inline-block; }
+        a.link {
+          display: inline-block; margin: 0 4px;
+          background-color: ${bg}; color: ${tc};
+          padding: 10px 15px; border-radius: 5px;
+          transition: all 0.3s linear; text-decoration: none; font-weight: bold;
+        }
+        a.link:hover { transform: scale(1.2); background-color: ${hc}; z-index: 1; }
+      </style>
+      <a class="link" href="${url}" target="${tgt}" role="menuitem"><slot></slot></a>`;
+    const link = this.shadowRoot.querySelector("a.link");
+    this._makeAccessible(link, { role: "menuitem", keyAction: () => link.click() });
   }
 }
 
