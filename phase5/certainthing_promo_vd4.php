@@ -59,14 +59,6 @@
   </script>
 
   <!-- =====================================================================
-       VD FRAMEWORK 4 — scripts
-       ===================================================================== -->
-  <script src="vd_framework_utils.js?v=<?php echo time(); ?>"></script>
-  <script src="vd_framework_theme.js?v=<?php echo time(); ?>"></script>
-  <script src="vd_framework_global.js?v=<?php echo time(); ?>"></script>
-  <script src="vd_framework_macrocomponents.js?v=<?php echo time(); ?>"></script>
-
-  <!-- =====================================================================
        MINIMAL CUSTOM CSS
        Only for what no component covers:
        - body / page shell
@@ -486,6 +478,15 @@
       </p>
     </vd-center>
   </vd-colorcard>
+
+  <!-- =====================================================================
+       VD FRAMEWORK 4 — scripts loaded at end of body so full DOM is parsed
+       before custom elements are upgraded (fixes this.innerHTML in connectedCallback)
+       ===================================================================== -->
+  <script src="vd_framework_utils.js?v=<?php echo time(); ?>"></script>
+  <script src="vd_framework_theme.js?v=<?php echo time(); ?>"></script>
+  <script src="vd_framework_global.js?v=<?php echo time(); ?>"></script>
+  <script src="vd_framework_macrocomponents.js?v=<?php echo time(); ?>"></script>
 
 </body>
 </html>
