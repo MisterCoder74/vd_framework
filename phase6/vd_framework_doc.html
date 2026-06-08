@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VD Framework 4 - Complete Reference</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:Arial,sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:2rem;color:#333;}
+  .container{max-width:1500px;margin:0 auto;background:white;border-radius:12px;padding:2rem;box-shadow:0 8px 32px rgba(0,0,0,.2);}
+  .header{text-align:center;margin-bottom:2rem;padding-bottom:1rem;border-bottom:3px solid #667eea;}
+  .header h1{color:#667eea;font-size:2.5rem;margin-bottom:.5rem;}
+  .header p{color:#666;font-size:1.05rem;line-height:1.8;}
+  .header a{color:#764ba2;}
+  .load-order{background:#f0f4ff;padding:1rem 1.5rem;border-radius:8px;margin-bottom:1.5rem;border-left:4px solid #667eea;}
+  .load-order h3{color:#667eea;margin-bottom:.5rem;}
+  .load-order code{display:block;background:#fff;padding:.5rem .75rem;border-radius:4px;margin:.25rem 0;font-size:.85rem;border:1px solid #ddd;}
+  .legend{background:#f8f9fa;padding:1rem;border-radius:8px;margin-bottom:2rem;border-left:4px solid #667eea;}
+  .legend h3{color:#667eea;margin-bottom:.5rem;}
+  .legend-item{display:inline-block;margin-right:2rem;margin-top:.5rem;font-size:.9rem;}
+  .reference-table{width:100%;border-collapse:collapse;margin-top:1rem;font-size:.88rem;}
+  .reference-table th{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;padding:11px;text-align:left;font-weight:bold;position:sticky;top:0;z-index:10;}
+  .reference-table td{padding:10px 12px;border:1px solid #e0e0e0;vertical-align:top;}
+  .reference-table tr:nth-child(even):not(.category-header){background:#f8f9fa;}
+  .reference-table tr:hover:not(.category-header){background:#e3f2fd;transition:background .2s;}
+  .category-header td{background:linear-gradient(135deg,#f0f4ff,#e8eaf6);font-weight:bold;font-size:1rem;padding:10px 12px;color:#3949ab;border-top:2px solid #667eea;}
+  .tag-name{font-family:monospace;font-weight:bold;color:#667eea;font-size:.9rem;white-space:nowrap;}
+  .attr-name{font-family:monospace;font-size:.82rem;color:#333;}
+  .dependency{color:#e65100;font-weight:bold;}
+  .no-dependency{color:#2e7d32;font-weight:bold;}
+  .aria-badge{display:inline-block;background:#e3f2fd;color:#1565c0;border-radius:3px;padding:1px 5px;font-size:.78rem;font-family:monospace;margin:1px 0;}
+  .new-badge{display:inline-block;background:#e8f5e9;color:#1b5e20;border-radius:3px;padding:1px 5px;font-size:.75rem;font-weight:bold;margin-left:4px;}
+  .css-var{font-family:monospace;font-size:.78rem;color:#6a1b9a;}
+  .phase-note{font-size:.78rem;color:#888;font-style:italic;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>📚 VD Framework 4 — Complete Reference</h1>
+    <p>
+      Complete guide to all 51 custom components, attributes, ARIA roles, and CSS variables<br>
+      See framework demo: <a href="vd_framework_4.html"><b>vd-framework 4 demo</b></a> &nbsp;|&nbsp;
+      Code snippets: <a href="vd_framework_snippets.html"><b>vd-framework 4 snippets</b></a> &nbsp;|&nbsp;
+      Example page: <a href="vd_framework_examplepage.html"><b>example landing page</b></a><br>
+      <span style="font-size:.9rem;">Built by <a href="https://www.vivacitydesign.net" target="_blank">Vivacity Design Web Agency</a> &mdash; v4.0 &mdash; 2025&ndash;2026</span>
+    </p>
+  </div>
+
+  <div class="load-order">
+    <h3>⚙️ Required Load Order</h3>
+    <code>&lt;script src="vd_framework_utils.js"&gt;&lt;/script&gt;           &lt;!-- 1. Foundation (VDBaseElement + VDUtils) --&gt;</code>
+    <code>&lt;script src="vd_framework_theme.js"&gt;&lt;/script&gt;           &lt;!-- 2. Theme tokens (--vd-* CSS vars + &lt;vd-theme&gt;) --&gt;</code>
+    <code>&lt;script src="vd_framework_global.js"&gt;&lt;/script&gt;          &lt;!-- 3. Base components (30) --&gt;</code>
+    <code>&lt;script src="vd_framework_macrocomponents.js"&gt;&lt;/script&gt; &lt;!-- 4. Macro components (15) --&gt;</code>
+    <p style="margin-top:.5rem;font-size:.85rem;color:#555;">⚠️ All paths must be <strong>relative</strong> (no leading <code>/</code>) — folder-agnostic, relative to the HTML file.</p>
+  </div>
+
+  <div class="legend">
+    <h3>📖 Legend</h3>
+    <span class="legend-item"><strong>Attributes:</strong> HTML attributes for the component</span>
+    <span class="legend-item"><strong class="dependency">Dependencies:</strong> Required parent/child</span>
+    <span class="legend-item"><strong class="no-dependency">None:</strong> Standalone</span>
+    <span class="legend-item"><span class="new-badge">NEW</span> Added in v4</span>
+    <span class="legend-item"><span class="aria-badge">role=…</span> ARIA role</span>
+    <span class="legend-item"><span class="css-var">--vd-*</span> CSS variable consumed</span>
+  </div>
+
+  <div style="overflow-x:auto;">
+  <table class="reference-table">
+    <thead>
+      <tr>
+        <th style="width:16%;">Component</th>
+        <th style="width:28%;">Attributes</th>
+        <th style="width:20%;">Description</th>
+        <th style="width:18%;">ARIA &amp; Keyboard (v4)</th>
+        <th style="width:18%;">Dependencies / Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- THEME -->
+      <tr class="category-header"><td colspan="5">🎨 THEME SYSTEM <span class="new-badge">NEW v4</span></td></tr>
+      <tr>
+        <td class="tag-name">&lt;vd-theme&gt; <span class="new-badge">NEW</span></td>
+        <td>
+          <span class="attr-name">• primary</span> (color)<br>
+          <span class="attr-name">• secondary</span> (color)<br>
+          <span class="attr-name">• background</span> (color)<br>
+          <span class="attr-name">• surface</span> (color)<br>
+          <span class="attr-name">• text</span> (color)<br>
+          <span class="attr-name">• border</span> (color)<br>
+          <span class="attr-name">• radius</span> (e.g. 8px)<br>
+          <span class="attr-name">• shadow</span> (box-shadow value)<br>
+          <span class="attr-name">• font-family</span><br>
+          <span class="attr-name">• transition</span> (e.g. 0.2s ease)<br>
+          <span class="attr-name">• success / error / warning / info</span>
+        </td>
+        <td>Injects <code>--vd-*</code> CSS custom properties into <code>:root</code>. All VD components consume these tokens automatically. Place before any VD component in <code>&lt;body&gt;</code>.</td>
+        <td>No interactive role. Programmatic API: <code>VdTheme.applyTokens({…})</code>, <code>VdTheme.getVar("primary")</code></td>
+        <td class="no-dependency">None — standalone. Loaded via <code>vd_framework_theme.js</code></td>
+      </tr>
+
+      <!-- NAVIGATION -->
+      <tr class="category-header"><td colspan="5">🧭 NAVIGATION COMPONENTS</td></tr>
+      <tr>
+        <td class="tag-name">&lt;vd-radionav&gt;</td>
+        <td>
+          <span class="attr-name">• backgroundcolor</span><br>
+          <span class="attr-name">• align</span> (left/center/right)<br>
+          <span class="attr-name">• textcolor</span>
+        </td>
+        <td>Navigation container styled as a radio-button group. Manages active state across child links.</td>
+        <td>
+          <span class="aria-badge">role=radiogroup</span><br>
+          <span class="aria-badge">aria-label</span><br>
+          <span class="phase-note">v4: ARIA radiogroup semantics</span>
+        </td>
+        <td class="dependency">Requires <code>&lt;vd-radiolink&gt;</code> children</td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-radiolink&gt;</td>
+        <td>
+          <span class="attr-name">• url</span> (link destination)<br>
+          <span class="attr-name">• textcolor</span><br>
+          <span class="attr-name">• activecolor</span><br>
+          <span class="attr-name">• shadowcolor</span><br>
+          <span class="attr-name">• backgroundcolor</span><br>
+          <span class="attr-name">• active</span> (true/false)<br>
+          <span class="attr-name">• show-radio</span> (true/false)
+        </td>
+        <td>Individual radio-style navigation link. Handles click, sets <code>active</code>, navigates to <code>url</code>.</td>
+        <td>
+          <span class="aria-badge">role=radio</span><br>
+          <span class="aria-badge">aria-checked</span> (synced)<br>
+          <span class="aria-badge">tabindex</span><br>
+          Keyboard: Enter/Space selects<br>
+          <span class="phase-note">v4: full ARIA radio semantics</span>
+        </td>
+        <td class="dependency">Must be child of <code>&lt;vd-radionav&gt;</code></td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-popnav&gt;</td>
+        <td>
+          <span class="attr-name">• backgroundcolor</span><br>
+          <span class="attr-name">• shadowcolor</span><br>
+          <span class="attr-name">• align</span>
+        </td>
+        <td>Horizontal navigation bar with pop-up (lift) hover effect on links.</td>
+        <td>
+          <span class="aria-badge">role=navigation</span><br>
+          <span class="aria-badge">aria-label</span><br>
+          <span class="phase-note">v4: landmark navigation</span>
+        </td>
+        <td class="dependency">Requires <code>&lt;vd-poplink&gt;</code> children</td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-poplink&gt;</td>
+        <td>
+          <span class="attr-name">• url</span><br>
+          <span class="attr-name">• target</span> (_self/_blank)<br>
+          <span class="attr-name">• textcolor</span><br>
+          <span class="attr-name">• hovercolor</span>
+        </td>
+        <td>Individual link for popnav with hover lift animation.</td>
+        <td>
+          <span class="aria-badge">role=menuitem</span><br>
+          Keyboard: Enter activates<br>
+          <span class="phase-note">v4: menuitem role</span>
+        </td>
+        <td class="dependency">Must be child of <code>&lt;vd-popnav&gt;</code></td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-skewnav&gt;</td>
+        <td>
+          <span class="attr-name">• backgroundcolor</span><br>
+          <span class="attr-name">• shadowcolor</span><br>
+          <span class="attr-name">• align</span>
+        </td>
+        <td>Navigation bar with italic/skewed link style.</td>
+        <td>
+          <span class="aria-badge">role=navigation</span><br>
+          <span class="aria-badge">aria-label</span><br>
+          <span class="phase-note">v4: landmark navigation</span>
+        </td>
+        <td class="dependency">Requires <code>&lt;vd-skewlink&gt;</code> children</td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-skewlink&gt;</td>
+        <td>
+          <span class="attr-name">• url</span><br>
+          <span class="attr-name">• target</span><br>
+          <span class="attr-name">• skewcolor</span><br>
+          <span class="attr-name">• textcolor</span><br>
+          <span class="attr-name">• hovercolor</span>
+        </td>
+        <td>Skewed/slanted link button for skewnav.</td>
+        <td>
+          <span class="aria-badge">role=menuitem</span><br>
+          Keyboard: Enter activates<br>
+          <span class="phase-note">v4: menuitem role</span>
+        </td>
+        <td class="dependency">Must be child of <code>&lt;vd-skewnav&gt;</code></td>
+      </tr>
+
+      <!-- LAYOUT -->
+      <tr class="category-header"><td colspan="5">🏗️ LAYOUT COMPONENTS</td></tr>
+      <tr>
+        <td class="tag-name">&lt;vd-structure&gt;</td>
+        <td>
+          <span class="attr-name">• orientation</span> (portrait/landscape)<br>
+          <span class="attr-name">• backgroundcolor</span><br>
+          <span class="attr-name">• textcolor</span><br>
+          <span class="attr-name">• shadowcolor</span><br>
+          <span class="attr-name">• width</span><br>
+          <span class="attr-name">• height</span>
+        </td>
+        <td>Two-panel layout container (side + main). <code>landscape</code> = side-by-side; <code>portrait</code> = stacked.</td>
+        <td>—</td>
+        <td class="dependency">Use with <code>&lt;vd-sidepanel&gt;</code> + <code>&lt;vd-mainpanel&gt;</code></td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-mainpanel&gt;</td>
+        <td>
+          <span class="attr-name">• backgroundcolor</span><br>
+          <span class="attr-name">• textcolor</span><br>
+          <span class="attr-name">• width</span>
+        </td>
+        <td>Primary content panel inside <code>&lt;vd-structure&gt;</code>.</td>
+        <td>—</td>
+        <td class="dependency">Must be inside <code>&lt;vd-structure&gt;</code></td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-sidepanel&gt;</td>
+        <td>
+          <span class="attr-name">• backgroundcolor</span><br>
+          <span class="attr-name">• textcolor</span><br>
+          <span class="attr-name">• width</span>
+        </td>
+        <td>Secondary/sidebar panel inside <code>&lt;vd-structure&gt;</code>.</td>
+        <td>—</td>
+        <td class="dependency">Must be inside <code>&lt;vd-structure&gt;</code></td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-sp&gt;</td>
+        <td>
+          <span class="attr-name">• bordercolor</span><br>
+          <span class="attr-name">• width</span>
+        </td>
+        <td>Bordered section/panel with subtle separation styling.</td>
+        <td>—</td>
+        <td class="no-dependency">None</td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-spacer&gt;</td>
+        <td><span class="attr-name">• height</span> (e.g. 20px)</td>
+        <td>Vertical spacer block.</td>
+        <td>—</td>
+        <td class="no-dependency">None</td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-left&gt;</td>
+        <td>—</td>
+        <td>Aligns child content to the left.</td>
+        <td>—</td>
+        <td class="no-dependency">None</td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-right&gt;</td>
+        <td>—</td>
+        <td>Aligns child content to the right.</td>
+        <td>—</td>
+        <td class="no-dependency">None</td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-center&gt;</td>
+        <td>—</td>
+        <td>Centers child content.</td>
+        <td>—</td>
+        <td class="no-dependency">None</td>
+      </tr>
+
+      <!-- UI DISPLAY -->
+      <tr class="category-header"><td colspan="5">🖼️ UI DISPLAY COMPONENTS</td></tr>
+      <tr>
+        <td class="tag-name">&lt;vd-colorcard&gt;</td>
+        <td>
+          <span class="attr-name">• backgroundcolor</span><br>
+          <span class="attr-name">• textcolor</span><br>
+          <span class="attr-name">• shadowcolor</span><br>
+          <span class="attr-name">• imgsrc</span><br>
+          <span class="attr-name">• imgwidth</span><br>
+          <span class="attr-name">• imgheight</span><br>
+          <span class="attr-name">• width</span>
+        </td>
+        <td>Card with customizable background, optional top image, and slotted content.</td>
+        <td>—</td>
+        <td class="no-dependency">None</td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-colorbadge&gt;</td>
+        <td>
+          <span class="attr-name">• backgroundcolor</span><br>
+          <span class="attr-name">• textcolor</span><br>
+          <span class="attr-name">• shadowcolor</span><br>
+          <span class="attr-name">• imgsrc</span><br>
+          <span class="attr-name">• imgwidth / imgheight</span><br>
+          <span class="attr-name">• width</span>
+        </td>
+        <td>Compact badge/chip component with optional icon image.</td>
+        <td>—</td>
+        <td class="no-dependency">None</td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-pill&gt;</td>
+        <td>
+          <span class="attr-name">• backgroundcolor</span><br>
+          <span class="attr-name">• textcolor</span>
+        </td>
+        <td>Small pill/tag for status labels or categories.</td>
+        <td>—</td>
+        <td class="no-dependency">None</td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-accordion&gt;</td>
+        <td>
+          <span class="attr-name">• title</span> (header text)<br>
+          <span class="attr-name">• backgroundcolor</span><br>
+          <span class="attr-name">• textcolor</span><br>
+          <span class="attr-name">• extend</span> (vertical/horizontal)<br>
+          <span class="attr-name">• width</span><br>
+          <span class="attr-name">• headheight</span><br>
+          <span class="css-var">--vd-border, --vd-radius, --vd-shadow, --vd-transition</span>
+        </td>
+        <td>Collapsible content panel. Click header to toggle open/closed.</td>
+        <td>
+          <span class="aria-badge">role=button</span> on header<br>
+          <span class="aria-badge">aria-expanded</span> (synced)<br>
+          Keyboard: Enter/Space toggles<br>
+          <span class="phase-note">v4: ARIA expanded state</span>
+        </td>
+        <td class="no-dependency">None</td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-alert&gt;</td>
+        <td>
+          <span class="attr-name">• backgroundcolor</span><br>
+          <span class="attr-name">• textcolor</span><br>
+          <span class="attr-name">• bordercolor</span><br>
+          <span class="attr-name">• icon</span>
+        </td>
+        <td>Alert/notification banner for status messages.</td>
+        <td>
+          <span class="aria-badge">role=alert</span><br>
+          <span class="aria-badge">aria-live=assertive</span><br>
+          <span class="phase-note">v4: live region</span>
+        </td>
+        <td class="no-dependency">None</td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-confirmation&gt;</td>
+        <td>
+          <span class="attr-name">• title</span><br>
+          <span class="attr-name">• backgroundcolor</span><br>
+          <span class="attr-name">• textcolor</span><br>
+          <span class="attr-name">• confirm-label</span><br>
+          <span class="attr-name">• cancel-label</span>
+        </td>
+        <td>Modal confirmation dialog with confirm/cancel actions.</td>
+        <td>
+          <span class="aria-badge">role=dialog</span><br>
+          <span class="aria-badge">aria-modal=true</span><br>
+          <span class="aria-badge">aria-labelledby</span><br>
+          <span class="phase-note">v4: modal dialog semantics</span>
+        </td>
+        <td class="no-dependency">None</td>
+      </tr>
+
+      <!-- FEEDBACK -->
+      <tr class="category-header"><td colspan="5">👍 FEEDBACK COMPONENTS</td></tr>
+      <tr>
+        <td class="tag-name">&lt;vd-like&gt;</td>
+        <td>
+          <span class="attr-name">• backgroundcolor</span><br>
+          <span class="attr-name">• textcolor</span><br>
+          <span class="attr-name">• hovercolor</span><br>
+          <span class="attr-name">• shadowcolor</span><br>
+          <span class="attr-name">• image</span> (icon src)<br>
+          <span class="css-var">--vd-success, --vd-transition</span>
+        </td>
+        <td>Like / upvote toggle button with animated counter. Fires <code>vd-like-toggle</code> custom event.</td>
+        <td>
+          <span class="aria-badge">role=button</span><br>
+          <span class="aria-badge">aria-label="Like"</span><br>
+          <span class="aria-badge">aria-pressed</span> (synced)<br>
+          <span class="phase-note">v4: pressed state + --vd-success color</span>
+        </td>
+        <td class="no-dependency">None</td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-dislike&gt;</td>
+        <td>
+          <span class="attr-name">• backgroundcolor</span><br>
+          <span class="attr-name">• textcolor</span><br>
+          <span class="attr-name">• hovercolor</span><br>
+          <span class="attr-name">• shadowcolor</span><br>
+          <span class="attr-name">• image</span><br>
+          <span class="css-var">--vd-error, --vd-transition</span>
+        </td>
+        <td>Dislike / downvote toggle button. Fires <code>vd-dislike-toggle</code> custom event.</td>
+        <td>
+          <span class="aria-badge">role=button</span><br>
+          <span class="aria-badge">aria-label="Dislike"</span><br>
+          <span class="aria-badge">aria-pressed</span> (synced)<br>
+          <span class="phase-note">v4: pressed state + --vd-error color</span>
+        </td>
+        <td class="no-dependency">None</td>
+      </tr>
+
+      <!-- TABLES -->
+      <tr class="category-header"><td colspan="5">📊 TABLE COMPONENTS</td></tr>
+      <tr>
+        <td class="tag-name">&lt;vd-table&gt;</td>
+        <td>
+          <span class="attr-name">• border</span> (px)<br>
+          <span class="attr-name">• width</span><br>
+          <span class="attr-name">• height</span>
+        </td>
+        <td>Styled data table container with sortable column support.</td>
+        <td>—</td>
+        <td class="dependency">Use with <code>&lt;vd-tr&gt;</code>, <code>&lt;vd-th&gt;</code>, <code>&lt;vd-td&gt;</code></td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-tr&gt;</td>
+        <td>—</td>
+        <td>Table row.</td>
+        <td>—</td>
+        <td class="dependency">Inside <code>&lt;vd-table&gt;</code></td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-th&gt;</td>
+        <td><span class="attr-name">• sortable</span> (boolean attr)</td>
+        <td>Table header cell. Add <code>sortable</code> for click-to-sort.</td>
+        <td>—</td>
+        <td class="dependency">Inside <code>&lt;vd-tr&gt;</code></td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-td&gt;</td>
+        <td>—</td>
+        <td>Table data cell.</td>
+        <td>—</td>
+        <td class="dependency">Inside <code>&lt;vd-tr&gt;</code></td>
+      </tr>
+
+      <!-- TYPOGRAPHY -->
+      <tr class="category-header"><td colspan="5">🔤 TYPOGRAPHY COMPONENTS</td></tr>
+      <tr>
+        <td class="tag-name">&lt;vd-bi&gt;</td>
+        <td>—</td>
+        <td>Bold + italic inline text.</td>
+        <td>—</td>
+        <td class="no-dependency">None</td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-bu&gt;</td>
+        <td>—</td>
+        <td>Bold + underlined inline text.</td>
+        <td>—</td>
+        <td class="no-dependency">None</td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-iu&gt;</td>
+        <td>—</td>
+        <td>Italic + underlined inline text.</td>
+        <td>—</td>
+        <td class="no-dependency">None</td>
+      </tr>
+
+      <!-- MACRO: VISUALIZATION -->
+      <tr class="category-header"><td colspan="5">📈 VISUALIZATION COMPONENTS &mdash; vd_framework_macrocomponents.js</td></tr>
+      <tr>
+        <td class="tag-name">&lt;vd-timeline&gt;</td>
+        <td>
+          <span class="attr-name">• title</span><br>
+          <span class="attr-name">• backgroundcolor</span><br>
+          <span class="attr-name">• textcolor</span><br>
+          <span class="attr-name">• shadowcolor</span><br>
+          <span class="attr-name">• width</span>
+        </td>
+        <td>Vertical timeline container. Title is displayed at the top.</td>
+        <td>
+          <span class="aria-badge">role=list</span><br>
+          <span class="aria-badge">aria-label</span> (from title)<br>
+          <span class="phase-note">v4: semantic list</span>
+        </td>
+        <td class="dependency">Requires <code>&lt;vd-timeline-item&gt;</code> children</td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-timeline-item&gt;</td>
+        <td>
+          <span class="attr-name">• date</span><br>
+          <span class="attr-name">• title</span><br>
+          <span class="attr-name">• backgroundcolor</span><br>
+          <span class="attr-name">• textcolor</span>
+        </td>
+        <td>Single event entry in a timeline.</td>
+        <td>
+          <span class="aria-badge">role=listitem</span><br>
+          <span class="phase-note">v4: semantic listitem</span>
+        </td>
+        <td class="dependency">Must be inside <code>&lt;vd-timeline&gt;</code></td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-progresscircle&gt;</td>
+        <td>
+          <span class="attr-name">• value</span> (0–100)<br>
+          <span class="attr-name">• color</span> (stroke color; default: <span class="css-var">--vd-primary</span>)<br>
+          <span class="attr-name">• width</span> (e.g. 150px)
+        </td>
+        <td>Circular SVG progress indicator.</td>
+        <td>
+          <span class="aria-badge">role=progressbar</span><br>
+          <span class="aria-badge">aria-valuenow/min/max</span><br>
+          <span class="phase-note">v4: progressbar + --vd-primary default</span>
+        </td>
+        <td class="no-dependency">None</td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-countdown&gt;</td>
+        <td>
+          <span class="attr-name">• end</span> (ISO 8601 datetime)<br>
+          <span class="attr-name">• backgroundcolor</span><br>
+          <span class="attr-name">• textcolor</span>
+        </td>
+        <td>Live countdown to a target date, showing days/hours/minutes/seconds.</td>
+        <td>
+          <span class="aria-badge">role=timer</span><br>
+          <span class="aria-badge">aria-label</span><br>
+          <span class="phase-note">v4: timer role</span>
+        </td>
+        <td class="no-dependency">None</td>
+      </tr>
+
+      <!-- MACRO: TABS -->
+      <tr class="category-header"><td colspan="5">🗂️ TAB COMPONENTS &mdash; vd_framework_macrocomponents.js</td></tr>
+      <tr>
+        <td class="tag-name">&lt;vd-tabcontrol&gt;</td>
+        <td>
+          <span class="attr-name">• backgroundcolor</span><br>
+          <span class="attr-name">• textcolor</span><br>
+          <span class="attr-name">• activecolor</span><br>
+          <span class="css-var">--vd-border</span>
+        </td>
+        <td>Tab container. Manages active tab state across <code>&lt;vd-tab&gt;</code> children.</td>
+        <td>
+          <span class="aria-badge">role=tablist</span><br>
+          <span class="aria-badge">aria-label="Tabs"</span><br>
+          <span class="phase-note">v4: tablist semantics</span>
+        </td>
+        <td class="dependency">Requires <code>&lt;vd-tab&gt;</code> children</td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-tab&gt;</td>
+        <td>
+          <span class="attr-name">• label</span> (tab header text)<br>
+          <span class="attr-name">• active</span> (true/false)
+        </td>
+        <td>Individual tab panel. Only the active tab is visible.</td>
+        <td>
+          <span class="aria-badge">role=tab</span><br>
+          <span class="aria-badge">aria-selected</span> (synced)<br>
+          <span class="aria-badge">tabindex</span><br>
+          <span class="phase-note">v4: tab role + selected sync</span>
+        </td>
+        <td class="dependency">Must be inside <code>&lt;vd-tabcontrol&gt;</code></td>
+      </tr>
+
+      <!-- MACRO: CAROUSEL -->
+      <tr class="category-header"><td colspan="5">🎠 CAROUSEL &mdash; vd_framework_macrocomponents.js</td></tr>
+      <tr>
+        <td class="tag-name">&lt;vd-carousel&gt;</td>
+        <td>
+          <span class="attr-name">• width</span><br>
+          <span class="attr-name">• height</span><br>
+          <span class="attr-name">• speed</span> (ms)<br>
+          <span class="attr-name">• direction</span> (left/right)<br>
+          <span class="attr-name">• stoponhover</span> (true/false)<br>
+          <span class="attr-name">• backgroundcolor</span>
+        </td>
+        <td>Auto-rotating content carousel. Accepts any child elements (images, cards, etc.).</td>
+        <td>
+          <span class="aria-badge">role=region</span><br>
+          <span class="aria-badge">aria-roledescription=carousel</span><br>
+          <span class="aria-badge">aria-label</span><br>
+          <span class="phase-note">v4: carousel region</span>
+        </td>
+        <td class="no-dependency">None</td>
+      </tr>
+
+      <!-- MACRO: CHAT -->
+      <tr class="category-header"><td colspan="5">💬 CHAT COMPONENTS &mdash; vd_framework_macrocomponents.js</td></tr>
+      <tr>
+        <td class="tag-name">&lt;vd-chatbox&gt;</td>
+        <td>
+          <span class="attr-name">• backgroundcolor</span><br>
+          <span class="attr-name">• textcolor</span><br>
+          <span class="attr-name">• shadowcolor</span><br>
+          <span class="attr-name">• width</span>
+        </td>
+        <td>Static chat message container for displaying conversation threads.</td>
+        <td>
+          <span class="aria-badge">role=log</span><br>
+          <span class="aria-badge">aria-live=polite</span><br>
+          <span class="phase-note">v4: live log region</span>
+        </td>
+        <td class="dependency">Use with <code>&lt;vd-chatline&gt;</code></td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-chatline&gt;</td>
+        <td><span class="attr-name">• user</span> (display name)</td>
+        <td>Single chat message line with user label.</td>
+        <td>—</td>
+        <td class="dependency">Inside <code>&lt;vd-chatbox&gt;</code></td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-inputbox&gt;</td>
+        <td>
+          <span class="attr-name">• placeholder</span><br>
+          <span class="attr-name">• backgroundcolor</span><br>
+          <span class="attr-name">• textcolor</span><br>
+          <span class="attr-name">• buttoncolor</span>
+        </td>
+        <td>Text input area with send button. Fires <code>vd-send</code> event on submit.</td>
+        <td>
+          <span class="aria-badge">aria-label</span> on textarea<br>
+          <span class="phase-note">v4: labelled input</span>
+        </td>
+        <td class="no-dependency">None — standalone</td>
+      </tr>
+
+      <!-- MACRO: AI -->
+      <tr class="category-header"><td colspan="5">🤖 AI COMPONENTS &mdash; vd_framework_macrocomponents.js</td></tr>
+      <tr>
+        <td class="tag-name">&lt;vd-chatbot&gt;</td>
+        <td>
+          <span class="attr-name">• title</span><br>
+          <span class="attr-name">• backgroundcolor</span><br>
+          <span class="attr-name">• textcolor</span><br>
+          <span class="attr-name">• width</span><br>
+          <span class="attr-name">• height</span><br>
+          <span class="attr-name">• model</span> (GPT model ID)
+        </td>
+        <td>Full GPT-4 chat interface. Communicates via <code>openai_proxy.php</code> — API key stays server-side.</td>
+        <td>
+          Chat history: <span class="aria-badge">role=log</span><br>
+          <span class="phase-note">v4: secure proxy + log role</span>
+        </td>
+        <td>Requires <code>openai_proxy.php</code> on same server. <span class="new-badge">Security v4</span></td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-dalle&gt;</td>
+        <td>
+          <span class="attr-name">• title</span><br>
+          <span class="attr-name">• backgroundcolor</span><br>
+          <span class="attr-name">• textcolor</span><br>
+          <span class="attr-name">• width</span>
+        </td>
+        <td>DALL-E 3 image generation interface. Displays prompt input and generated images. Uses <code>openai_proxy.php</code>.</td>
+        <td>
+          History panel: <span class="aria-badge">role=log</span><br>
+          <span class="phase-note">v4: secure proxy + log role</span>
+        </td>
+        <td>Requires <code>openai_proxy.php</code>. <span class="new-badge">Security v4</span></td>
+      </tr>
+
+      <!-- MACRO: MEDIA -->
+      <tr class="category-header"><td colspan="5">🎬 MEDIA COMPONENTS &mdash; vd_framework_macrocomponents.js</td></tr>
+      <tr>
+        <td class="tag-name">&lt;vd-video&gt;</td>
+        <td>
+          <span class="attr-name">• file</span> (video URL or path)<br>
+          <span class="attr-name">• title</span> (display title)<br>
+          <span class="attr-name">• backgroundcolor</span><br>
+          <span class="attr-name">• textcolor</span><br>
+          <span class="attr-name">• bordercolor</span><br>
+          <span class="attr-name">• fullscreen</span> (boolean attr — set to <code>"true"</code> to trigger fullscreen)<br>
+        </td>
+        <td>
+          Styled HTML5 video player with custom play/seek controls.<br>
+          <strong>Phase 6:</strong> added fullscreen support via button and JS API.<br>
+          <code>element.enterFullscreen()</code> — programmatic fullscreen trigger.<br>
+          Setting <code>fullscreen="true"</code> attribute also triggers fullscreen.<br>
+          Fires <code>vd-fullscreen</code> event on activation.
+        </td>
+        <td><code>vd-fullscreen</code> — on fullscreen activation</td>
+        <td class="no-dependency">None</td>
+      </tr>
+      <tr>
+        <td class="tag-name">&lt;vd-music&gt;</td>
+        <td>
+          <span class="attr-name">• src</span> (audio URL)<br>
+          <span class="attr-name">• autoplay</span> (true/false)<br>
+          <span class="attr-name">• loop</span> (true/false)<br>
+          <span class="attr-name">• backgroundcolor</span><br>
+          <span class="attr-name">• textcolor</span>
+        </td>
+        <td>Styled HTML5 audio player with custom controls.</td>
+        <td>—</td>
+        <td class="no-dependency">None</td>
+      </tr>
+
+      <!-- MACRO: PLANNER -->
+      <tr class="category-header"><td colspan="5">📅 PLANNER COMPONENT &mdash; vd_framework_macrocomponents.js</td></tr>
+      <tr>
+        <td class="tag-name">&lt;vd-planner&gt;</td>
+        <td>
+          <span class="attr-name">• backgroundcolor</span><br>
+          <span class="attr-name">• textcolor</span><br>
+          <span class="attr-name">• width</span><br>
+          <span class="attr-name">• backend</span> (path to calendar-backend.php)
+        </td>
+        <td>Full calendar/planner with add, edit, delete tasks. Persists via PHP backend.</td>
+        <td>—</td>
+        <td>Requires <code>calendar-backend.php</code> + writable <code>tasks.json</code></td>
+      </tr>
+
+    </tbody>
+  </table>
+  </div>
+
+
+  <!-- =========================================================
+       PHASE 6 — NEW COMPONENTS
+       ========================================================= -->
+  <div style="margin-top:2rem;padding:1rem 1rem 0;background:#f5f0ff;border-radius:8px;border-left:4px solid #764ba2;">
+    <h3 style="color:#764ba2;margin-bottom:.75rem;">🆕 Phase 6 — New Components</h3>
+    <p style="font-size:.9rem;color:#555;margin-bottom:1rem;">Five new base components added to <code>vd_framework_global.js</code>, plus <code>vd-video</code> updated with fullscreen support.</p>
+    <table style="width:100%;border-collapse:collapse;font-size:.87rem;">
+      <thead>
+        <tr style="background:#764ba2;color:white;">
+          <th style="padding:8px;text-align:left;">Tag</th>
+          <th style="padding:8px;text-align:left;">Attributes</th>
+          <th style="padding:8px;text-align:left;">Description &amp; Events</th>
+          <th style="padding:8px;text-align:left;">Example</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- vd-button -->
+        <tr style="background:#faf8ff;">
+          <td style="padding:10px;font-family:monospace;font-weight:bold;white-space:nowrap;">&lt;vd-button&gt;</td>
+          <td style="padding:10px;">
+            <b>label</b> — button text (fallback if no slot content)<br>
+            <b>href</b> — renders as &lt;a&gt; when set, &lt;button&gt; otherwise<br>
+            <b>target</b> — link target (_self/_blank, default _self)<br>
+            <b>variant</b> — <code>primary</code> | <code>secondary</code> | <code>ghost</code><br>
+            <b>size</b> — <code>sm</code> | <code>md</code> | <code>lg</code><br>
+            <b>backgroundcolor</b> — fill color (primary) or border/text color (secondary/ghost)<br>
+            <b>textcolor</b> — text color on filled button<br>
+            <b>hovercolor</b> — hover background color<br>
+            <b>icon</b> — emoji or character prepended to label<br>
+            <b>type</b> — <code>button</code> | <code>submit</code> (when used in forms)<br>
+            <b>disabled</b> — boolean, disables click and applies 50% opacity
+          </td>
+          <td style="padding:10px;">
+            Generic CTA button. Works as link (&lt;a&gt;) or native button element depending on <code>href</code>.<br><br>
+            Slot content overrides <code>label</code> — put styled HTML inside the tag for custom content.<br><br>
+            <b>Events fired:</b><br>
+            <code>vd-click</code> — <code>{element, label, href}</code> — fires on every click (bubbles, composed)<br><br>
+            <b>JS example:</b><br>
+            <code>document.querySelector('vd-button').addEventListener('vd-click', e =&gt; console.log(e.detail));</code>
+          </td>
+          <td style="padding:10px;font-family:monospace;font-size:.8rem;">
+            &lt;vd-button label="Register" href="register.php" variant="primary" size="lg"&gt;&lt;/vd-button&gt;<br><br>
+            &lt;vd-button variant="secondary" backgroundcolor="#667eea"&gt;Learn More&lt;/vd-button&gt;<br><br>
+            &lt;vd-button type="submit" icon="🚀"&gt;Send&lt;/vd-button&gt;
+          </td>
+        </tr>
+
+        <!-- vd-chip -->
+        <tr>
+          <td style="padding:10px;font-family:monospace;font-weight:bold;white-space:nowrap;">&lt;vd-chip&gt;</td>
+          <td style="padding:10px;">
+            <b>label</b> — chip text (fallback if no slot content)<br>
+            <b>backgroundcolor</b> — chip background<br>
+            <b>textcolor</b> — chip text color<br>
+            <b>bordercolor</b> — border color<br>
+            <b>icon</b> — emoji/character before label<br>
+            <b>removable</b> — boolean; shows × button and allows removal
+          </td>
+          <td style="padding:10px;">
+            Lightweight inline tag/badge. Lighter than <code>vd-pill</code> — no image, no profile context.<br>
+            Use for feature tags, status badges, filter chips, keyword tags.<br><br>
+            <b>Events fired:</b><br>
+            <code>vd-chip-click</code> — <code>{element, label}</code> — on chip body click<br>
+            <code>vd-chip-remove</code> — <code>{element, label}</code> — on × button click<br>
+            &nbsp;&nbsp;→ cancelable: call <code>e.preventDefault()</code> to prevent auto-removal from DOM
+          </td>
+          <td style="padding:10px;font-family:monospace;font-size:.8rem;">
+            &lt;vd-chip label="Token Illimitati" icon="♾️"&gt;&lt;/vd-chip&gt;<br><br>
+            &lt;vd-chip label="React" removable backgroundcolor="#e8f0fe" textcolor="#1a73e8"&gt;&lt;/vd-chip&gt;<br><br>
+            document.querySelectorAll('vd-chip').forEach(c =&gt; c.addEventListener('vd-chip-remove', e =&gt; console.log('removed:', e.detail.label)));
+          </td>
+        </tr>
+
+        <!-- vd-hero -->
+        <tr style="background:#faf8ff;">
+          <td style="padding:10px;font-family:monospace;font-weight:bold;white-space:nowrap;">&lt;vd-hero&gt;</td>
+          <td style="padding:10px;">
+            <b>title</b> — h1 headline; wrap words with <code>*word*</code> for accent color<br>
+            <b>subtitle</b> — paragraph below title<br>
+            <b>eyebrow</b> — small label above title<br>
+            <b>imgsrc</b> — hero image URL (optional)<br>
+            <b>imgalt</b> — img alt text (default: "Hero image")<br>
+            <b>backgroundcolor</b> — section background<br>
+            <b>textcolor</b> — base text color<br>
+            <b>accentcolor</b> — color for *accent* words in title<br>
+            <b>padding</b> — inner padding (default: 80px 2rem 60px)
+          </td>
+          <td style="padding:10px;">
+            Full-page hero section: eyebrow → headline → subtitle → badges → CTA → image.<br><br>
+            <b>Named slots:</b><br>
+            <code>slot="badges"</code> — renders in a flexbox row (use &lt;vd-chip&gt; elements here)<br>
+            <code>slot="cta"</code> — primary CTA area (use &lt;vd-button&gt; here)<br>
+            Default slot — appended after image (for extra content)<br><br>
+            <b>Accent syntax:</b> <code>title="Da Idea ad App in *60 Secondi*"</code> → "60 Secondi" renders in accentcolor
+          </td>
+          <td style="padding:10px;font-family:monospace;font-size:.8rem;">
+            &lt;vd-hero<br>
+            &nbsp;&nbsp;title="Da Idea ad App in *60 Secondi*"<br>
+            &nbsp;&nbsp;subtitle="Descrivi la tua app..."<br>
+            &nbsp;&nbsp;eyebrow="🇮🇹 Made in Italy"<br>
+            &nbsp;&nbsp;imgsrc="preview.jpg"<br>
+            &nbsp;&nbsp;accentcolor="#667eea"&gt;<br>
+            &nbsp;&nbsp;&lt;vd-chip slot="badges" icon="♾️" label="Token Illimitati"&gt;&lt;/vd-chip&gt;<br>
+            &nbsp;&nbsp;&lt;vd-button slot="cta" label="Inizia Gratis" href="register.php"&gt;&lt;/vd-button&gt;<br>
+            &lt;/vd-hero&gt;
+          </td>
+        </tr>
+
+        <!-- vd-section -->
+        <tr>
+          <td style="padding:10px;font-family:monospace;font-weight:bold;white-space:nowrap;">&lt;vd-section&gt;</td>
+          <td style="padding:10px;">
+            <b>title</b> — section heading (renders as &lt;h2&gt;)<br>
+            <b>subtitle</b> — introductory paragraph below heading<br>
+            <b>backgroundcolor</b> — section background<br>
+            <b>textcolor</b> — text color<br>
+            <b>maxwidth</b> — inner content max-width (default: 1100px)<br>
+            <b>padding</b> — inner padding (default: 80px 2rem)<br>
+            <b>align</b> — text-align: <code>left</code> | <code>center</code> | <code>right</code>
+          </td>
+          <td style="padding:10px;">
+            Semantic section wrapper with built-in heading, subtitle, max-width centering, and slot for any content.<br>
+            Replaces the repeated <code>&lt;div class="page-section"&gt;</code> boilerplate on multi-section pages.<br><br>
+            Uses a real <code>&lt;section&gt;</code> element with <code>aria-label</code> for accessibility.
+          </td>
+          <td style="padding:10px;font-family:monospace;font-size:.8rem;">
+            &lt;vd-section title="Caratteristiche" subtitle="Una suite completa..." textcolor="#fff" backgroundcolor="#0d0d1a"&gt;<br>
+            &nbsp;&nbsp;&lt;vd-colorcard ...&gt;...&lt;/vd-colorcard&gt;<br>
+            &lt;/vd-section&gt;
+          </td>
+        </tr>
+
+        <!-- vd-pricingcard -->
+        <tr style="background:#faf8ff;">
+          <td style="padding:10px;font-family:monospace;font-weight:bold;white-space:nowrap;">&lt;vd-pricingcard&gt;</td>
+          <td style="padding:10px;">
+            <b>title</b> — plan name<br>
+            <b>price</b> — numeric price (e.g. "4.99")<br>
+            <b>currency</b> — currency symbol (default: "€")<br>
+            <b>period</b> — billing period label (default: "/mo")<br>
+            <b>note</b> — small note below price (e.g. "+ API cost")<br>
+            <b>description</b> — plan summary paragraph<br>
+            <b>backgroundcolor</b>, <b>textcolor</b>, <b>shadowcolor</b><br>
+            <b>accentcolor</b> — CTA and featured border color<br>
+            <b>featured</b> — boolean; shows featured badge + accent border<br>
+            <b>featuredlabel</b> — featured badge text (default: "⭐ Most Popular")<br>
+            <b>ctalabel</b> — CTA button text (default: "Get Started")<br>
+            <b>ctahref</b> — CTA link URL<br>
+            <b>ctatarget</b> — CTA link target (default: _self)
+          </td>
+          <td style="padding:10px;">
+            Dedicated pricing card with price display, feature checklist slot, and CTA button.<br><br>
+            Slot items (<code>&lt;li&gt;</code>) render as a feature checklist — style them yourself or prefix with emojis/checkmarks.<br><br>
+            <b>Events fired:</b><br>
+            <code>vd-cta-click</code> — <code>{element, href, label}</code> — on CTA click (bubbles, composed)
+          </td>
+          <td style="padding:10px;font-family:monospace;font-size:.8rem;">
+            &lt;vd-pricingcard<br>
+            &nbsp;&nbsp;title="Beta" price="4.99" currency="€" period="/mese"<br>
+            &nbsp;&nbsp;note="+ OpenAI API a consumo"<br>
+            &nbsp;&nbsp;featured featuredlabel="🚀 Early Access"<br>
+            &nbsp;&nbsp;ctalabel="Inizia Gratis" ctahref="register.php"<br>
+            &nbsp;&nbsp;accentcolor="#667eea"&gt;<br>
+            &nbsp;&nbsp;&lt;li&gt;♾️ Token illimitati&lt;/li&gt;<br>
+            &nbsp;&nbsp;&lt;li&gt;🐙 GitHub push nativo&lt;/li&gt;<br>
+            &lt;/vd-pricingcard&gt;
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+    <p style="font-size:.8rem;color:#888;margin:.75rem 0 .5rem;">All new Phase 6 components extend VDBaseElement, use Shadow DOM, fire custom events with <code>bubbles:true, composed:true</code>, and are keyboard-accessible.</p>
+  </div>
+
+  <div style="margin-top:2rem;padding:1rem;background:#f0f4ff;border-radius:8px;border-left:4px solid #667eea;">
+    <h3 style="color:#667eea;margin-bottom:.75rem;">🔧 VDBaseElement API (v4)</h3>
+    <table style="width:100%;border-collapse:collapse;font-size:.87rem;">
+      <tr style="background:#667eea;color:white;"><th style="padding:8px;">Method</th><th style="padding:8px;">Description</th></tr>
+      <tr style="background:#f8f9fa;"><td style="padding:8px;font-family:monospace;">_addListener(target, event, fn, [opts])</td><td style="padding:8px;">Register event listener — auto-removed on disconnect</td></tr>
+      <tr><td style="padding:8px;font-family:monospace;">_addInterval(fn, delay)</td><td style="padding:8px;">Register interval — auto-cleared on disconnect</td></tr>
+      <tr style="background:#f8f9fa;"><td style="padding:8px;font-family:monospace;">_addTimeout(fn, delay)</td><td style="padding:8px;">Register timeout — auto-cleared on disconnect</td></tr>
+      <tr><td style="padding:8px;font-family:monospace;">_makeAccessible(el, {label, role, keyAction})</td><td style="padding:8px;">Add ARIA role, aria-label, tabindex and keyboard handler</td></tr>
+      <tr style="background:#f8f9fa;"><td style="padding:8px;font-family:monospace;">static get shadowMode()</td><td style="padding:8px;">Return <code>"none"</code> to skip Shadow DOM (light DOM mode)</td></tr>
+      <tr><td style="padding:8px;font-family:monospace;">disconnectedCallback()</td><td style="padding:8px;">Auto-cleanup — override with <code>super.disconnectedCallback()</code></td></tr>
+    </table>
+  </div>
+
+  <div style="margin-top:1.5rem;padding:1rem;background:#f0fff4;border-radius:8px;border-left:4px solid #2e7d32;">
+    <h3 style="color:#2e7d32;margin-bottom:.75rem;">🔐 Security: OpenAI Proxy (v4)</h3>
+    <p style="font-size:.9rem;line-height:1.7;">
+      v4 replaces the <code>key.ini</code> client-side fetch with a server-side <strong>openai_proxy.php</strong>.<br>
+      The browser only calls <code>openai_proxy.php</code> — the API key is never exposed in DevTools.<br>
+      Set the key via environment variable <code>OPENAI_API_KEY</code> or a <code>.env</code> file <em>outside the webroot</em>.<br>
+      <strong style="color:#c62828;">Never commit API keys to version control.</strong>
+    </p>
+  </div>
+
+  <p style="text-align:center;margin-top:2rem;color:#999;font-size:.85rem;">
+    VD Framework 4.0 &mdash; &copy; 2025&ndash;2026 <a href="https://www.vivacitydesign.net" target="_blank" style="color:#667eea;">Vivacity Design Web Agency</a>
+  </p>
+
+</div>
+</body>
+</html>
