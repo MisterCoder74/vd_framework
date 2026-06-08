@@ -70,9 +70,9 @@
        MINIMAL CUSTOM CSS
        Only for what no component covers:
        - body / page shell
-       - hero section  (no vd-hero component exists yet)
+       - hero section  → vd-hero ✅ Phase 6
        - feature-grid  (CSS layout wrapper)
-       - btn-cta       (no vd-button component exists yet)
+       - btn-cta       → vd-button ✅ Phase 6
        - section shell (semantic wrapper + h2 styling)
        ===================================================================== -->
   <style>
@@ -103,7 +103,7 @@
       margin-bottom: 1.5rem;
     }
 
-    /* ---- Hero (no vd-hero component) ---- */
+    /* ---- Hero CSS — replaced by vd-hero in Phase 6 (kept for reference) ---- */
     .hero-wrap {
       text-align: center;
       padding: 100px 2rem 60px;
@@ -162,53 +162,59 @@
                       border: 1px solid #667eea; color: #667eea;
                       border-radius: 20px; padding: 0.3rem 1rem; font-size: 0.82rem; margin-bottom: 1rem; }
 
-    /* ---- vd-pop-nav sticky ---- */
-    vd-pop-nav { position: sticky; top: 0; z-index: 100; }
+    /* ---- vd-popnav sticky ---- */
+    vd-popnav { position: sticky; top: 0; z-index: 100; }
   </style>
 </head>
 <body>
 
   <!-- ================================================================
-       NAVIGATION — vd-pop-nav + vd-pop-link
+       NAVIGATION — vd-popnav + vd-poplink
        ================================================================ -->
-  <vd-pop-nav backgroundcolor="#0d0d1a" shadowcolor="rgba(0,0,0,0.6)" align="center">
-    <vd-pop-link url="#filosofia"      backgroundcolor="transparent" textcolor="#aaa" hovercolor="#667eea">Filosofia</vd-pop-link>
-    <vd-pop-link url="#caratteristiche" backgroundcolor="transparent" textcolor="#aaa" hovercolor="#667eea">Caratteristiche</vd-pop-link>
-    <vd-pop-link url="#prezzi"         backgroundcolor="transparent" textcolor="#aaa" hovercolor="#667eea">Prezzi</vd-pop-link>
-    <vd-pop-link url="#demo"           backgroundcolor="transparent" textcolor="#aaa" hovercolor="#667eea">Demo</vd-pop-link>
-    <vd-pop-link url="#documentazione" backgroundcolor="transparent" textcolor="#aaa" hovercolor="#667eea">Docs</vd-pop-link>
-    <vd-pop-link url="#faq"            backgroundcolor="transparent" textcolor="#aaa" hovercolor="#667eea">FAQ</vd-pop-link>
-    <vd-pop-link url="#join"           backgroundcolor="#667eea"     textcolor="#fff"  hovercolor="#764ba2">Join</vd-pop-link>
-  </vd-pop-nav>
+  <vd-popnav backgroundcolor="#0d0d1a" shadowcolor="rgba(0,0,0,0.6)" align="center">
+    <vd-poplink url="#filosofia"      backgroundcolor="transparent" textcolor="#aaa" hovercolor="#667eea">Filosofia</vd-poplink>
+    <vd-poplink url="#caratteristiche" backgroundcolor="transparent" textcolor="#aaa" hovercolor="#667eea">Caratteristiche</vd-poplink>
+    <vd-poplink url="#prezzi"         backgroundcolor="transparent" textcolor="#aaa" hovercolor="#667eea">Prezzi</vd-poplink>
+    <vd-poplink url="#demo"           backgroundcolor="transparent" textcolor="#aaa" hovercolor="#667eea">Demo</vd-poplink>
+    <vd-poplink url="#documentazione" backgroundcolor="transparent" textcolor="#aaa" hovercolor="#667eea">Docs</vd-poplink>
+    <vd-poplink url="#faq"            backgroundcolor="transparent" textcolor="#aaa" hovercolor="#667eea">FAQ</vd-poplink>
+    <vd-poplink url="#join"           backgroundcolor="#667eea"     textcolor="#fff"  hovercolor="#764ba2">Join</vd-poplink>
+  </vd-popnav>
 
   <!-- ================================================================
-       HERO — hand-coded (no vd-hero component yet)
+       HERO — vd-hero (Phase 6) ✅
        ================================================================ -->
-  <div class="hero-wrap" id="hero">
-    <p class="hero-eyebrow">🇮🇹 Concepito in Italia &mdash; pensato per il mondo</p>
-    <h1 class="hero-title">Da Idea ad App Live<br>in <em>60 Secondi</em></h1>
-    <p class="hero-sub">Descrivi la tua applicazione a parole. CertainThing scrive il codice, te lo mostra in anteprima in tempo reale e lo pubblica online. Tutto in un minuto — senza toccare un terminale.</p>
-    <div class="hero-badges">
-      <span class="hero-badge">♾️ Token Illimitati</span>
-      <span class="hero-badge">⚡ Deploy Istantaneo</span>
-      <span class="hero-badge">💰 Solo €4.99/mese</span>
-      <span class="hero-badge">🤖 Modelli OpenAI</span>
-      <span class="hero-badge">🐙 GitHub Integrato</span>
-    </div>
-    <a href="https://www.vivacitydesign.net/certainThing/v1.2/certainthing/register.php" target="_blank" class="btn-cta">
-      Inizia Gratis — 7 Giorni di Prova
-    </a>
-    <br>
-    <img src="https://www.vivacitydesign.net/vd_ai_division/vd-ai-certainthing/certainthing_05-20-2026_01.jpg"
-         alt="Anteprima interfaccia CertainThing — vibe coding AI tool italiano"
-         class="hero-img">
-  </div>
+  <vd-hero id="hero"
+    title="Da Idea ad App Live in *60 Secondi*"
+    subtitle="Descrivi la tua applicazione a parole. CertainThing scrive il codice, te lo mostra in anteprima in tempo reale e lo pubblica online. Tutto in un minuto — senza toccare un terminale."
+    eyebrow="🇮🇹 Concepito in Italia — pensato per il mondo"
+    imgsrc="https://www.vivacitydesign.net/vd_ai_division/vd-ai-certainthing/certainthing_05-20-2026_01.jpg"
+    imgalt="Anteprima interfaccia CertainThing — vibe coding AI tool italiano"
+    backgroundcolor="transparent"
+    textcolor="#fff"
+    accentcolor="#667eea"
+    padding="80px 2rem 60px">
+    <vd-chip slot="badges" label="♾️ Token Illimitati" backgroundcolor="rgba(255,255,255,0.07)" textcolor="#e0e0e0" bordercolor="rgba(255,255,255,0.15)"></vd-chip>
+    <vd-chip slot="badges" label="⚡ Deploy Istantaneo" backgroundcolor="rgba(255,255,255,0.07)" textcolor="#e0e0e0" bordercolor="rgba(255,255,255,0.15)"></vd-chip>
+    <vd-chip slot="badges" label="💰 Solo €4.99/mese" backgroundcolor="rgba(255,255,255,0.07)" textcolor="#e0e0e0" bordercolor="rgba(255,255,255,0.15)"></vd-chip>
+    <vd-chip slot="badges" label="🤖 Modelli OpenAI" backgroundcolor="rgba(255,255,255,0.07)" textcolor="#e0e0e0" bordercolor="rgba(255,255,255,0.15)"></vd-chip>
+    <vd-chip slot="badges" label="🐙 GitHub Integrato" backgroundcolor="rgba(255,255,255,0.07)" textcolor="#e0e0e0" bordercolor="rgba(255,255,255,0.15)"></vd-chip>
+    <vd-button slot="cta"
+      label="Inizia Gratis — 7 Giorni di Prova"
+      href="https://www.vivacitydesign.net/certainThing/v1.2/certainthing/register.php"
+      target="_blank"
+      variant="primary"
+      size="lg"
+      backgroundcolor="#667eea"
+      hovercolor="#764ba2">
+    </vd-button>
+  </vd-hero>
 
   <!-- ================================================================
        FILOSOFIA — vd-colorcard
        ================================================================ -->
-  <div class="page-section" id="filosofia">
-    <h2>Filosofia</h2>
+  <vd-section id="filosofia" title="Filosofia" backgroundcolor="transparent" textcolor="#aaa" padding="80px 2rem" maxwidth="1100px">
+    <!-- h2 "Filosofia" now rendered by vd-section[title] -->
     <vd-colorcard backgroundcolor="#1a1a2e" textcolor="#aaa" shadowcolor="rgba(102,126,234,0.25)" width="100%">
       <p>CertainThing nasce dalla convinzione che programmare dovrebbe essere naturale come una conversazione.
          Lo chiamiamo <strong style="color:#fff;">Vibe Coding</strong>: il tuo intento creativo è il motore,
@@ -217,18 +223,16 @@
       <p style="margin-top:1rem;">Costruito in Italia, con un occhio all'utenza internazionale — perché le buone idee
          non hanno frontiere, ma meritano strumenti all'altezza.</p>
       <p style="margin-top:1.8rem;">
-        <a href="./nascita_di_certainthing.html" target="_blank" class="btn-cta btn-secondary">
-          Scopri come CertainThing è nato in 3 giorni →
-        </a>
+        <vd-button href="./nascita_di_certainthing.html" target="_blank" variant="secondary" backgroundcolor="#667eea" size="md" label="Scopri come CertainThing è nato in 3 giorni →"></vd-button>
       </p>
     </vd-colorcard>
-  </div>
+  </vd-section>
 
   <!-- ================================================================
        CARATTERISTICHE — 8× vd-colorcard in feature-grid
        ================================================================ -->
-  <div class="page-section" id="caratteristiche">
-    <h2>Caratteristiche</h2>
+  <vd-section id="caratteristiche" title="Caratteristiche" backgroundcolor="transparent" textcolor="#aaa" padding="80px 2rem" maxwidth="1100px">
+    <!-- h2 "Caratteristiche" now rendered by vd-section[title] -->
     <p>Una suite completa per trasformare conversazioni in software funzionante — dal primo prompt al repo GitHub, senza mai lasciare il browser.</p>
     <div class="feature-grid">
 
@@ -281,56 +285,54 @@
       </vd-colorcard>
 
     </div>
-  </div>
+  </vd-section>
 
   <!-- ================================================================
        PREZZI — vd-colorcard + vd-sp (per gli highlight item)
        ================================================================ -->
-  <div class="page-section" id="prezzi">
-    <h2>Prezzi</h2>
-    <p>Un modello di pricing pensato per essere onesto: niente crediti che finiscono all'improvviso,
-       niente trasformazioni opache. Paghi la piattaforma, i token li paghi direttamente a OpenAI.</p>
-    <vd-colorcard backgroundcolor="#1a1a2e" textcolor="#aaa" shadowcolor="rgba(102,126,234,0.3)" width="100%">
-      <div class="price-tag"><sup>€</sup>4<span style="font-size:2rem;">.99</span><sub>/mese</sub></div>
-      <p class="price-note">+ costo API OpenAI a tuo consumo — mediamente $0.25(*) per 1 milione di token</p>
-      <p style="margin-top:0.75rem;font-size:0.9rem;color:#666;">Il prezzo di un cappuccino e un cornetto. Per costruire applicazioni reali.</p>
-
-      <p style="margin-top:1.5rem;margin-bottom:0.75rem;color:#fff;font-weight:600;">Cosa include:</p>
-
-      <vd-sp bordercolor="#667eea">
-        <p><strong style="color:#fff;">♾️ Token illimitati</strong> — nessun gioco di crediti che finiscono all'improvviso</p>
-      </vd-sp>
-      <vd-sp bordercolor="#764ba2" style="margin-top:0.75rem;">
-        <p><strong style="color:#fff;">👁️ Costo trasparente</strong> — paghi esattamente quello che usi, niente di più</p>
-      </vd-sp>
-      <vd-sp bordercolor="#667eea" style="margin-top:0.75rem;">
-        <p><strong style="color:#fff;">🏗️ Stack Vanilla</strong> — PHP + HTML + JS, compatibile con qualsiasi hosting, inclusi quelli gratuiti</p>
-      </vd-sp>
-      <vd-sp bordercolor="#764ba2" style="margin-top:0.75rem;">
-        <p><strong style="color:#fff;">🔒 Tre garanzie</strong> — OpenAI per l'AI, GitHub per il codice, Stripe per i pagamenti</p>
-      </vd-sp>
-
-      <div class="trust-row">
-        <span class="trust-logo">OpenAI</span>
-        <span class="trust-logo">GitHub</span>
-        <span class="trust-logo">Stripe</span>
-        <span style="font-size:0.8rem;color:#666;">— tre nomi, tre garanzie</span>
-      </div>
-
-      <p style="margin-top:1.5rem;font-size:0.85rem;color:#555;">
-        Un caso concreto: costruire questa intera pagina promozionale con CertainThing ci è costata
-        <strong style="color:#667eea;">$0.0003</strong>. Non è un errore di battitura.
-      </p>
-    </vd-colorcard>
-  </div>
+  <!-- ================================================================
+       PREZZI — vd-pricingcard (Phase 6) ✅
+       ================================================================ -->
+  <vd-section id="prezzi"
+    title="Prezzi"
+    subtitle="Un modello di pricing pensato per essere onesto: niente crediti che finiscono all'improvviso, niente trasformazioni opache. Paghi la piattaforma, i token li paghi direttamente a OpenAI."
+    backgroundcolor="transparent"
+    textcolor="#aaa"
+    padding="80px 2rem"
+    maxwidth="1100px"
+    align="center">
+    <vd-pricingcard
+      title="Beta Access"
+      price="4.99"
+      currency="€"
+      period="/mese"
+      note="+ costo API OpenAI a tuo consumo — mediamente $0.25(*) per 1 milione di token"
+      description="Il prezzo di un cappuccino e un cornetto. Per costruire applicazioni reali."
+      backgroundcolor="#1a1a2e"
+      textcolor="#aaa"
+      shadowcolor="rgba(102,126,234,0.3)"
+      accentcolor="#667eea"
+      featured
+      featuredlabel="🚀 Early Access — Posti Limitati"
+      ctalabel="Inizia Gratis — 7 Giorni di Prova"
+      ctahref="https://www.vivacitydesign.net/certainThing/v1.2/certainthing/register.php"
+      ctatarget="_blank">
+      <li>♾️ <strong>Token illimitati</strong> — nessun gioco di crediti che finiscono all'improvviso</li>
+      <li>👁️ <strong>Costo trasparente</strong> — paghi esattamente quello che usi, niente di più</li>
+      <li>🏗️ <strong>Stack Vanilla</strong> — PHP + HTML + JS, qualsiasi hosting, anche gratuito</li>
+      <li>🔒 <strong>Tre garanzie</strong> — OpenAI per l'AI, GitHub per il codice, Stripe per i pagamenti</li>
+      <li>💡 Costruire questa pagina con CertainThing è costato <strong style="color:#667eea;">$0.0003</strong></li>
+    </vd-pricingcard>
+  </vd-section>
 
   <!-- ================================================================
        DEMO — 2× vd-colorcard wrapping native <video>
        Note: video-tag has a max-width:480px limitation and custom controls
              that don't suit full-width promo embeds — see missing components report.
        ================================================================ -->
-  <div class="page-section" id="demo" style="text-align:center;">
-    <h2>Demo</h2>
+  <vd-section id="demo" title="Demo" backgroundcolor="transparent" textcolor="#aaa" padding="80px 2rem" maxwidth="1100px">
+  
+    <!-- h2 "Demo" now rendered by vd-section[title] -->
     <p>Parole convincono, ma i numeri — e i video — dimostrano. Guarda CertainThing in azione.</p>
 
     <vd-colorcard backgroundcolor="#0d0d1a" textcolor="#aaa" shadowcolor="rgba(102,126,234,0.3)" width="100%">
@@ -348,13 +350,13 @@
       </video>
       <p style="margin-top:0.75rem;font-size:0.9rem;color:#666;">Demo 2 — Dal prompt dettagliato a GitHub: dal vibe al repo in 60 secondi.</p>
     </vd-colorcard>
-  </div>
+  </vd-section>
 
   <!-- ================================================================
        DOCUMENTAZIONE — vd-accordion
        ================================================================ -->
-  <div class="page-section" id="documentazione">
-    <h2>Documentazione</h2>
+  <vd-section id="documentazione" title="Documentazione" backgroundcolor="transparent" textcolor="#aaa" padding="80px 2rem" maxwidth="1100px">
+    <!-- h2 "Documentazione" now rendered by vd-section[title] -->
     <vd-accordion title="Documentazione Tecnica" backgroundcolor="#1a1a2e" textcolor="#ccc" width="100%">
       <p>La documentazione tecnica copre tutto ciò che serve: struttura delle cartelle, prompt engineering,
          use case reali e workflow tipici. Trovi anche come usare il <strong>Website Analyzer</strong>
@@ -364,13 +366,13 @@
         <a href="doc.html" target="_blank" style="color:#667eea;">Esplora la documentazione completa →</a>
       </p>
     </vd-accordion>
-  </div>
+  </vd-section>
 
   <!-- ================================================================
        FAQ — 8× vd-accordion
        ================================================================ -->
-  <div class="page-section" id="faq">
-    <h2>Domande Frequenti</h2>
+  <vd-section id="faq" title="Domande Frequenti" backgroundcolor="transparent" textcolor="#aaa" padding="80px 2rem" maxwidth="1100px">
+    <!-- h2 "Domande Frequenti" now rendered by vd-section[title] -->
 
     <vd-accordion title="Cos'è il Vibe Coding?" backgroundcolor="#1a1a2e" textcolor="#ccc" width="100%">
       <p>Vibe Coding è un approccio allo sviluppo software dove l'intento creativo guida la creazione.
@@ -436,12 +438,13 @@
         e output token, e potrebbe variare leggermente a seconda dell'operazione svolta.
       </p>
     </vd-accordion>
-  </div>
+  </vd-section>
 
   <!-- ================================================================
        JOIN / CTA — vd-colorcard
        ================================================================ -->
-  <div class="page-section" id="join" style="text-align:center;">
+  <vd-section id="join" title="Entra nella Beta" backgroundcolor="transparent" textcolor="#aaa" padding="80px 2rem" maxwidth="1100px">
+  
     <vd-colorcard backgroundcolor="#1a1a2e" textcolor="#aaa" shadowcolor="rgba(102,126,234,0.35)" width="100%">
       <vd-center>
         <div class="early-badge">🚀 Early Access — Ora Disponibile</div>
@@ -456,12 +459,12 @@
              target="_blank" style="color:#667eea;">creare una API Key presso OpenAI</a>.
         </p>
         <p style="margin-top:2rem;">
-          <a href="https://www.vivacitydesign.net/certainThing/v1.2/certainthing/register.php"
-             target="_blank" class="btn-cta">Crea il Tuo Account Gratuito →</a>
+          <vd-button href="https://www.vivacitydesign.net/certainThing/v1.2/certainthing/register.php"
+             target="_blank" label="Crea il Tuo Account Gratuito →" variant="primary" size="lg" backgroundcolor="#667eea" hovercolor="#764ba2"></vd-button>
         </p>
       </vd-center>
     </vd-colorcard>
-  </div>
+  </vd-section>
 
   <!-- ================================================================
        FOOTER — vd-colorcard + vd-center
